@@ -10,11 +10,19 @@ import top.yumbo.springcloud.car.entity.Car;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MySpider {
     public static void main(String[] args) {
+
+        System.out.println(LocalDate.now());
+
+//        batch();
+    }
+
+    private static void batch() {
         final String html = new RestTemplate().getForObject("https://www.58.com/ershouche/", String.class);
         final List<String> hrefList = Jsoup.parse(html).body().getElementsByClass("icon_main").get(0).getElementsByTag("a").stream().map(a -> {
             return "https:"+a.attr("href");
@@ -22,7 +30,6 @@ public class MySpider {
         hrefList.parallelStream().forEach(href->{
             catchPage(href);
         });
-
     }
 
     private static void catchPage(String url) {

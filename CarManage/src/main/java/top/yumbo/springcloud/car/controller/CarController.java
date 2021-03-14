@@ -73,12 +73,19 @@ public class CarController {
         return false;
     }
 
-    @PostMapping("/car/batch")
+    @PostMapping("/car/batch/insert")
     @ResponseBody
     public Boolean insertBatch(@RequestBody String json) {
         System.out.println(json);
         final List<Car> tCarList = JSONObject.parseArray(json, Car.class);
         return tCarIService.saveBatch(tCarList);
+    }
+
+    @PostMapping("/car/batch/delete")
+    @ResponseBody
+    public Boolean deleteBatch(List<Integer> ids){
+        System.out.println(ids);
+        return tCarIService.removeByIds(ids);
     }
 
 }

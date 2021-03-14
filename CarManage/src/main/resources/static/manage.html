@@ -61,16 +61,21 @@
         }
 
         .avatar {
-            width: 178px;
-            height: 178px;
+            width: 240px;
+            height: 180px;
             display: block;
+            padding-top: 2px;
             margin: auto;
+        }
+
+        .el-upload-dragger {
+            width: 250px;
         }
 
         .titleFont {
             font-size: 24px;
             color: #2f2e2e;
-
+            margin-right: 20px;
         }
 
         .menu-font {
@@ -151,46 +156,47 @@
             padding: 0;
         }
 
-
         .has-gutter {
             position: sticky;
             top: 100px;
         }
+
+        textarea {
+            height: 170px;
+        }
+
     </style>
 </head>
 <body style="margin: auto;height: 100%;overflow-y: hidden">
 <div id="app" style="width: 100%;height: 100%;margin: auto">
-    <el-dialog title="提示"
-               :visible.sync="centerDialogVisible"
-               width="30%"
-               center>
-        <span>是否确认删除？</span>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="undo">取 消</el-button>
-            <el-button type="primary" @click="ensure">确 定</el-button>
-        </span>
-    </el-dialog>
-    <el-dialog title="添加记录" :visible.sync="dialogTableVisible">
+
+    <el-dialog title="添加记录(批量)" :visible.sync="dialogTableVisible" width="90%">
+        <el-row>
+            <el-button type="success" icon="el-icon-check" @click="batchAdd" circle
+                       style="float: right;margin-bottom: 5px;"></el-button>
+        </el-row>
         <el-row>
             <el-col :span="24">
                 <el-table size="mini" :data="gridData" border style="width: 100%" highlight-current-row>
-                    <el-table-column prop="carImage" label="参考照片">
+                    <el-table-column prop="carImage" label="参考照片" width="276">
                         <template slot-scope="scope">
                             <el-upload
+                                    :drag="true"
+                                    :disabled="scope.row.isSelected != true"
                                     action="aaa"
                                     class="avatar-uploader"
                                     :show-file-list="false"
                                     :http-request="Uploadfile">
-                                <img v-if="scope.carImage!=''" :src="scope.carImage"
-                                     class="avatar">
+                                <img v-if="scope.row.carImage!=''" :src="scope.row.carImage" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                             </el-upload>
                         </template>
                     </el-table-column>
-                    <el-table-column v-for="(v,i) in tableColumn2" :prop="v.prop" :label="v.title">
+                    <el-table-column v-for="(v,i) in tableColumn2" :prop="v.prop" :label="v.title" :width="v.width">
                         <template slot-scope="scope">
                             <span v-if="scope.row.isSelected == true">
-                                <el-input size="mini" placeholder="请输入内容" v-model="selectRow2[v.prop]">
+                                <el-input size="mini" rows="9" :type="v.type" placeholder="请输入内容"
+                                          v-model="scope.row[v.prop]">
                                 </el-input>
                             </span>
                             <span v-else>{{scope.row[v.prop]}}</span>
@@ -200,9 +206,10 @@
                         <template slot-scope="scope">
                             <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;"
                                   @click="pwdChange(scope.row,scope.$index,true)">
-                                {{scope.row.isSelected?'保存':"修改"}}
+                                {{scope.row.isSelected ? '保存':"编辑"}}
                             </span>
                             <span v-if="!scope.row.isSelected == true" class="el-tag el-tag--danger el-tag--mini"
+                                  @click="deleteRow(scope.row)"
                                   style="cursor: pointer;">
                                 删除
                             </span>
@@ -317,11 +324,12 @@
                 <el-main v-show="option == 2">
                     <el-row>
                         <span class="titleFont sticky">车辆管理</span>
-                        <el-button @click="addRecord">添加记录</el-button>
-                        <el-button @click="batchDelete">批量删除</el-button>
+                        <el-button @click="batchUpdate" type="primary" icon="el-icon-edit">批量修改</el-button>
+                        <el-button @click="batchDelete" type="danger" icon="el-icon-delete">批量删除</el-button>
+                        <el-button @click="addRecord" type="warning" icon="el-icon-circle-plus-outline">添加记录</el-button>
                     </el-row>
 
-                    <el-table ref="filterTable"
+                    <el-table ref="multipleTable"
                               :data="tableData"
                               @selection-change="handleSelectionChange"
                               highlight-current-row
@@ -330,14 +338,18 @@
                                 type="selection"
                                 width="55">
                         </el-table-column>
+                        <el-table-column
+                                prop="carId"
+                                label="id"
+                                width="75">
+                        </el-table-column>
                         <el-table-column v-for="(v,i) in tableColumn"
                                          :prop="v.prop"
                                          sortable
                                          :label="v.title">
                             <template slot-scope="scope">
                             <span v-if="scope.row.isSelected == true">
-                                <el-input size="mini" placeholder="请输入内容" v-model="selectRow[v.prop]">
-                                </el-input>
+                                <el-input size="mini" placeholder="请输入内容" v-model="scope.row[v.prop]"></el-input>
                             </span>
                                 <span v-else>{{
                                     typeof scope.row[v.prop] === 'number' ? formatPrice(scope.row[v.prop]) :scope.row[v.prop]
@@ -372,6 +384,9 @@
                                 <el-popover trigger="hover" placement="top" style="width: 180px">
                                     <el-card :body-style="{ padding: '2px' }">
                                         <el-upload
+                                                :data="scope.row"
+                                                :drag="true"
+                                                :disabled="scope.row.isSelected != true"
                                                 action="aaa"
                                                 class="avatar-uploader"
                                                 :show-file-list="false"
@@ -380,7 +395,16 @@
                                                  class="avatar">
                                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                                         </el-upload>
-                                        <div class="carInfo">{{scope.row.carDescription}}</div>
+                                        <div class="carInfo" v-if="scope.row.isSelected!=true">
+                                            {{scope.row.carDescription}}
+                                        </div>
+                                        <el-input
+                                                v-else
+                                                type="textarea"
+                                                :autosize="{ minRows: 2}"
+                                                placeholder="scope.row.carDescription"
+                                                v-model="scope.row.carDescription">
+                                        </el-input>
                                     </el-card>
                                     <div slot="reference" class="name-wrapper">
                                         <el-tag size="medium" type="info" effect="dark">{{info}}</el-tag>
@@ -453,26 +477,25 @@
                 pictureUrl: '',
                 info: '详细信息',
                 tableColumn2: [
-                    {title: '车辆品牌', prop: 'carBrand'},
-                    {title: '类型', prop: 'carType'},
-                    {title: '价格', prop: 'carPrice'},
-                    {title: '上牌时间', prop: 'carRegtime'},
-                    {title: '里程(万公里)', prop: 'carMileage'},
-                    {title: '状态', prop: 'carStatus'},
-                    {title: '地点', prop: 'carArea'},
-                    {title: '其它信息', prop: 'carDescription'},
+                    {title: '车辆品牌', prop: 'carBrand', width: '100'},
+                    {title: '类型', prop: 'carType', width: '100'},
+                    {title: '价格(元)', prop: 'carPrice', width: '100'},
+                    {title: '上牌时间', prop: 'carRegtime', width: '100'},
+                    {title: '里程(万公里)', prop: 'carMileage', width: '100'},
+                    {title: '状态', prop: 'carStatus', width: '100'},
+                    {title: '地点', prop: 'carArea', width: '100'},
+                    {title: '其它信息', prop: 'carDescription', width: '', type: 'textarea'},
                 ],
                 selectRow2: null,
                 tableColumn: [
                     {title: '车辆品牌', prop: 'carBrand'},
                     {title: '类型', prop: 'carType'},
-                    {title: '价格', prop: 'carPrice'},
+                    {title: '价格(元)', prop: 'carPrice'},
                     {title: '上牌时间', prop: 'carRegtime'},
                     {title: '里程(万公里)', prop: 'carMileage'},
                     {title: '地点', prop: 'carArea'},
                 ],
                 multipleSelection: [],/*多选*/
-                selectRow: null,
                 statusEnum: ['待售', '已售'],
                 total: 1,
                 pageSize: 15,
@@ -493,11 +516,69 @@
             };
         },
         methods: {
+            updateImg(row) {
+                console.log(row)
+            },
             addRecord() {
                 this.dialogTableVisible = true
             },
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
             batchDelete() {
+                this.$confirm('此操作将永久删除批量数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'error'
+                }).then(() => {
+                    let ms=this.multipleSelection
+                    let ids=[]
+                    ms.forEach(m=>{
+                        ids.push(m.carId)
+                    })
+                    this.delete('/car/batch/delete', ids)// 删除数据库中的
+                    this.multipleSelection.forEach(ms => {
+                        this.tableData = this.deleteOne(this.tableData, ms) // 删除表中的
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
 
+            }, batchUpdate() {
+                this.tableData.forEach(td => {
+                    td.isSelected = false
+                })
+                this.multipleSelection.forEach(ms => {
+                    ms.isSelected = true;
+                })
+                this.$forceUpdate()
+            },
+            batchAdd() {
+                axios.post('/car/batch/insert', this.gridData).then(res => {
+                    if (res.data == true) {
+                        this.$message({
+                            message: '添加成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('添加失败了，请刷新重试!');
+                    }
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
             },
             //添加
             add() {
@@ -505,7 +586,7 @@
                 //     if (i.isSelected) return this.$message.warning("请先保存当前编辑项");
                 // }
                 let j = {
-                    isSelected: false,
+                    isSelected: true,
                     carType: '',
                     carBrand: '',
                     carPrice: '',
@@ -516,16 +597,23 @@
                     carMileage: '',
                     carStatus: ''
                 };
-                this.selectRow2 = JSON.parse(JSON.stringify(j));
-                this.gridData.push(this.selectRow2);
+                let obj = JSON.parse(JSON.stringify(j));// 当前选中行数据
+                this.gridData.push(obj);
+                this.selectRow2 = obj;// 添加数据，选择该行
             },
             //修改
             pwdChange(row, index, cg) {
+                console.log(row)
                 row.isSelected = !row.isSelected
                 if (row.isSelected === false) {
-                    row.carImage=this.pictureUrl
+                    // 说明进行了保存操作
+                    this.selectRow2 = null;
                 }
 
+            },
+            deleteRow(row) {
+                console.log(row)
+                this.gridData = this.deleteOne(this.gridData, row)
             },
             //自己编写的函数用于生成文件名，防止上传的文件重名
             getUUID() {
@@ -533,10 +621,19 @@
                     return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
                 })
             },
+            updateUrl(carId, url) {
+                let td = this.tableData
+                for (let i = 0; i < td.length; i++) {
+                    if (td[i].carId == carId) {
+                        td[i].carImage = url;
+                    }
+                }
+            },
 
             Uploadfile(param) {
                 let file = param.file; // 得到文件的内容
-                console.log(file);
+                console.log("===param====")
+                console.log(param);
                 //填写获取签名的地址
                 const getPolicyApiUrl = 'http://yumbo.top:7002/asign'; //获取oss签名的地址
                 // 获取oss签名
@@ -569,26 +666,20 @@
                         console.log(sendData);
                         axios.post(ossUrl, sendData).then((res) => {
                             this.pictureUrl = ossUrl + '/' + accessUrl;//获得到的url需要将其存数据库中
+                            this.updateUrl(param.data.carId, this.pictureUrl)
+                            if (this.selectRow2 != null) {
+                                this.selectRow2.carImage = this.pictureUrl
+                            }
                             console.log('上传到阿里云的图片地址：' + ossUrl + '/' + accessUrl)
                         })
                     }
                 })
+                return this.pictureUrl;
             },
             formatPrice(price) {
                 return price / 10000 + '万'
             },
-            toggleSelection(rows) {
-                if (rows) {
-                    rows.forEach(row => {
-                        this.$refs.multipleTable.toggleRowSelection(row);
-                    });
-                } else {
-                    this.$refs.multipleTable.clearSelection();
-                }
-            },
-            handleSelectionChange(val) {
-                this.multipleSelection = val;
-            },
+
             changePage(val) {
                 this.requestData(val, this.pageSize);
             },
@@ -606,20 +697,11 @@
             filterStatus(value, row) {
                 return row.carStatus === value;
             },
-            undo() {
-                this.centerDialogVisible = false
-            },
-            ensure() {
-                this.centerDialogVisible = false
-                console.log('delete==>')
-                this.delete(this.selectRow)
-            },
             filterHandler() {
 
             }, handleEdit(index, row) {
-                row.isSelected = true;
-                row.optionStatus = true;
-                this.selectRow = row
+                row.isSelected = true
+                row.optionStatus = true
                 console.log('进行编辑')
             }, handleSave(index, row) {
                 row.isSelected = false;
@@ -628,9 +710,25 @@
                 this.update(row)
             },
             handleDelete(index, row) {
-                this.centerDialogVisible = true;
-                row.isSelected = false;
-                this.selectRow = row
+                this.$confirm('此操作将永久删除数据, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'error'
+                }).then(() => {
+                    row.isSelected = false;
+                    this.tableData = this.deleteOne(this.tableData, row)// 删除表格中的
+                    this.delete('/car/delete', {carId: row.carId}) // 删除数据库中的
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+
             },
             update(row) {
                 axios.post('/car/update', row).then(res => {
@@ -643,21 +741,19 @@
                         this.$message.error('更新失败了，请刷新重试!');
                     }
                     console.log(res)
-
                 }).catch(err => {
                     console.log(err)
                 })
             },
-            delete(row) {
-                console.log(row)
-                axios.post('/car/delete', {carId: row.carId}).then(res => {
+
+            delete(url, row) {
+                axios.post(url, row).then(res => {
                     if (res.data === true) {
                         this.$notify({
                             title: '成功',
                             message: '成功删除!',
                             type: 'success'
                         });
-                        this.deleteOne(row)
                     } else {
                         this.$notify.error({
                             title: '失败',
@@ -669,14 +765,37 @@
                     console.log(err)
                 })
             },
-            deleteOne(row) {
-                let td = []
-                for (let i = 0; i < this.tableData.length; i++) {
-                    if (this.tableData[i].carId != row.carId) {
-                        td.push(this.tableData[i])
+            equals(x, y) {
+                var f1 = x instanceof Object;
+                var f2 = y instanceof Object;
+                if (!f1 || !f2) {
+                    return x === y
+                }
+                if (Object.keys(x).length !== Object.keys(y).length) {
+                    return false
+                }
+                var newX = Object.keys(x);
+                for (var p in newX) {
+                    p = newX[p];
+                    var a = x[p] instanceof Object;
+                    var b = y[p] instanceof Object;
+                    if (a && b) {
+                        this.equals(x[p], y[p])
+                    } else if (x[p] != y[p]) {
+                        return false;
                     }
                 }
-                this.tableData = td
+                return true;
+            },
+            deleteOne(table, row) {
+                let td = []
+                for (let i = 0; i < table.length; i++) {
+                    if (!this.equals(table[i], row)) {
+                        console.log(i)
+                        td.push(table[i])
+                    }
+                }
+                return td;
             },
             requestData(currentPage, pageSize) {
                 axios({

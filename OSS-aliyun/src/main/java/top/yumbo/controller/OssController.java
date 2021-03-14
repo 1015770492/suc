@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 @RestController
 public class OssController {
@@ -27,9 +28,8 @@ public class OssController {
 
         String host = "http://" + bucket + "." + endpoint; // host的格式为 bucketname.endpoint
         // callbackUrl为 上传回调服务器的URL，请将下面的IP和Port配置为您自己的真实信息。
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String dir = simpleDateFormat.format(new java.util.Date());// 用户上传文件时指定的前缀。我这里设置日期为前缀
-
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Shanghai"));
+        String dir = LocalDate.now().toString();// 用户上传文件时指定的前缀。我这里设置日期为前缀
         OSSClient client = new OSSClient(endpoint, accessId, accessKey);
 
         long expireTime = 30;
