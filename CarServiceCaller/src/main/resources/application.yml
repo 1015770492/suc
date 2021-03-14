@@ -1,0 +1,35 @@
+server:
+  port: 7027
+#  servlet:
+#    context-path: /usedcar
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://yumbo.top:7001/eureka/   #要连接的注册中心（eureka服务器）地址
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: eureka-client-usedcar-caller
+  mvc:
+    view:
+      suffix: .jsp
+      prefix: /
+
+feign:
+  hystrix:
+    enabled: true  #打开feign断路器功能
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+ribbon:
+  ReadTimeout: 5000
+  ConnectTimeout: 5000
+

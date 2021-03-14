@@ -1,0 +1,705 @@
+<!--<%@ page contentType="text/html;charset=UTF-8" language="java" %>-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>管理页面</title>
+    <!-- 引入ElementUI样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+
+        /*头像样式*/
+        .el-avatar {
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        /*用户头像上的点位置调整*/
+        .dot-location {
+            position: relative;
+            left: 45px;
+            top: -30px;
+        }
+
+        /*侧边菜单栏样式*/
+        .el-menu-vertical-demo:not(.el-menu--collapse) {
+            width: 200px;
+            min-height: 400px;
+        }
+
+        el-main {
+            padding: 0;
+        }
+
+        .username {
+            color: white;
+        }
+
+        .avatar-uploader {
+            text-align: center;
+        }
+
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
+
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            width: 178px;
+            height: 178px;
+            line-height: 178px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 178px;
+            height: 178px;
+            display: block;
+            margin: auto;
+        }
+
+        .titleFont {
+            font-size: 24px;
+            color: #2f2e2e;
+
+        }
+
+        .menu-font {
+            text-align: center;
+            font-size: 14px;
+            padding-left: 13px;
+        }
+
+        /* 设置滚动条的样式 */
+        *::-webkit-scrollbar {
+            height: 5px; /*设置横向滚动条的高度*/
+            width: 5px; /*设置纵向向滚动条宽带*/
+            background-color: hsla(0, 0%, 100%, .5);
+        }
+
+        *::-webkit-scrollbar-track {
+            display: none;
+            border-radius: 10px;
+        }
+
+        /* 滚动条滑块样式 */
+        *::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        *::-webkit-scrollbar-track-piece {
+            border-radius: 10px;
+        }
+
+        @font-face {
+            font-family: "iconfont";
+            src: url('//at.alicdn.com/t/font_2415473_el1ai2s9k7m.eot?t=1615558782827'); /* IE9 */
+            src: url('//at.alicdn.com/t/font_2415473_el1ai2s9k7m.eot?t=1615558782827#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('data:application/x-font-woff2;charset=utf-8;base64,d09GMgABAAAAAAUkAAsAAAAACeAAAATVAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHEIGVgCDHAqHHIYPATYCJAMQCwoABCAFhG0HRht/CCMRdntQQpL9RQJvovW0AEZHrL+qOv6sPn1CpIoEa4IHyut9k5lss9AHWYiphRNOFk9NAMy7X7sD38C34ZLwEC+kCY9Il4xv9a9+wT3hncs2STTzfTdD3tWoCMOU2Ft++o5f2OkL4UYJoh8cM10kzoZ5QHOJLItqG+C4dUDdXxhlr6//gPjD2OVFXocAHMSQhahavW4TDBS6RMCUPj27d8RIaFEVJIGhsBVsVYgF6BjaTO0SMN/7e/GRAmGAhi7RlzbsVq0LFd/wZqucYE2gjYOAN5wZYLtAAlmAAtGj0NoJGfizkDjkaEVxwDDMGgzVF/dmq2Vh/lakBpbS9R9PA2FDl7ogtmhAwhssbiSLg2oElG2FSWgAD2SLAQSCSAMxB10ZNcyX6dQFe4bSNW1duLq6trq/rhJUVNaAlfisJfHi2o8fO25M140dshbLE2QMbXROxEdlmIFhwWDett6awQOD0INDHEX4yzLoHFk3P9T+Mv8v3N9qjpqAO2eSlfCerJm1SyQ1C3mbkjfBHVEOEgKjToUJU1p5+HBtaXyBKHnOdR7mZ9+KPeqJiGRvPr5T9/pW3ojcO8m8LqrCUnscE/DYJRHU95x/3PL9CLwcq73XY7B/73Mum+GfLkPU3TC4uEGreEBnal1DGOEuEMSkPU444AJqu5gk8Kk6whi0Qkr3PYVRhEbBRBim5OVQnD42Ptc5jsQdHO94+maoFl/G9FQ6GdhyzcbY2xvcG1xxt/dsSny7W+6KZcx82fVPJce/he7Ovd2d/i7cGn+6nRZXUGPfYl/dHgsj985zxnQ9ruY2G+lvtH5uWpUraQ6HM2xswxE3h0U3XuBqcnvMJOLkuHt6TIx+z2A5bFsYZeonsy/Wi28Yv8NkueYRI+IRcUc8i9QtOKb/v8Lik2t5q8YW9ZTJ7GGaPTKHmSyXhZeU8RSNreqtVXxy9+6Tiy9CSxqff7WmfsXjC659uz2Przlf4Am1fal8vvz5aV2eVYmtGlM1tgofX0+oZlY1m5hNb5WtHj6jU6OFLkd4cmTmzeYTmppNGhX9qHXuBT/p5YQ1v+6/Om9qFVJl2L5K9nFm0T0tpWp0sCLBdarae7SK71iYV1v5Y4qHd47w/Gs1MbXb4xL35pFTc0q5uintqstpzoP2FZI3h4pm15zB65r5o8cnDejTY2zQpKJtXcEhVtawuybeUNO+QVa4w7WQAYDVeqYiZDmwyP9yHID8Iqx/cRodm1TNa+8t+9twfgvXo4Erx3nsbshJtnHwQ/Ea8/48iRoU8UaoCHStUpLO6vGaF6GY7IRXKHYYTrCQM4AnQ8iD5WQQGARHoFGEaJAYJCEVNgt0nBQFGwYVwEEmNXY7CWQQEqHsQAZTAQh8bAUND0dB4uMyUmEfg04In8GGT0hw0EwEHukkRSwfzElgFYHcnwbPazQNavzUO7p9thIXeJQ3ZBtcVBdVOnTDChlixfbpGtVIUXihK7gN88yUhEd4LXrV1JZlLHqhwvOSGaoIrCKQ+9PgeY1OczWZ37+j22crFTVl5jdkGwanuqgaIG/StVHNpWRvn65R5I0UWTIvdEVmzIafKRVPGuG16Dt4U1uiRrGptJhevtzhFsCB/jxKaEIKJXT07sJ7OnDgBQo5+h517jn9swwAAAA=') format('woff2'),
+            url('//at.alicdn.com/t/font_2415473_el1ai2s9k7m.woff?t=1615558782827') format('woff'),
+            url('//at.alicdn.com/t/font_2415473_el1ai2s9k7m.ttf?t=1615558782827') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */ url('//at.alicdn.com/t/font_2415473_el1ai2s9k7m.svg?t=1615558782827#iconfont') format('svg'); /* iOS 4.1- */
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 18px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-group:before {
+            content: "\e620";
+        }
+
+        .icon-che1-copy:before {
+            font-size: 22px;
+            content: "\e600";
+        }
+
+        .icon-odometer:before {
+            content: "\e6af";
+        }
+
+        .el-table-add-row {
+            margin-top: 10px;
+            width: 100%;
+            height: 34px;
+            border: 1px dashed #c1c1cd;
+            border-radius: 3px;
+            cursor: pointer;
+            justify-content: center;
+            display: flex;
+            line-height: 34px;
+        }
+
+        .carInfo {
+            width: 180px;
+            padding: 5px;
+        }
+
+        .el-popover {
+            padding: 0;
+        }
+
+
+        .has-gutter {
+            position: sticky;
+            top: 100px;
+        }
+    </style>
+</head>
+<body style="margin: auto;height: 100%;overflow-y: hidden">
+<div id="app" style="width: 100%;height: 100%;margin: auto">
+    <el-dialog title="提示"
+               :visible.sync="centerDialogVisible"
+               width="30%"
+               center>
+        <span>是否确认删除？</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="undo">取 消</el-button>
+            <el-button type="primary" @click="ensure">确 定</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog title="添加记录" :visible.sync="dialogTableVisible">
+        <el-row>
+            <el-col :span="24">
+                <el-table size="mini" :data="gridData" border style="width: 100%" highlight-current-row>
+                    <el-table-column prop="carImage" label="参考照片">
+                        <template slot-scope="scope">
+                            <el-upload
+                                    action="aaa"
+                                    class="avatar-uploader"
+                                    :show-file-list="false"
+                                    :http-request="Uploadfile">
+                                <img v-if="scope.carImage!=''" :src="scope.carImage"
+                                     class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </el-upload>
+                        </template>
+                    </el-table-column>
+                    <el-table-column v-for="(v,i) in tableColumn2" :prop="v.prop" :label="v.title">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.isSelected == true">
+                                <el-input size="mini" placeholder="请输入内容" v-model="selectRow2[v.prop]">
+                                </el-input>
+                            </span>
+                            <span v-else>{{scope.row[v.prop]}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="100">
+                        <template slot-scope="scope">
+                            <span class="el-tag el-tag--info el-tag--mini" style="cursor: pointer;"
+                                  @click="pwdChange(scope.row,scope.$index,true)">
+                                {{scope.row.isSelected?'保存':"修改"}}
+                            </span>
+                            <span v-if="!scope.row.isSelected == true" class="el-tag el-tag--danger el-tag--mini"
+                                  style="cursor: pointer;">
+                                删除
+                            </span>
+                            <span v-else class="el-tag  el-tag--mini" style="cursor: pointer;"
+                                  @click="pwdChange(scope.row,scope.$index,false)">
+                                取消
+                            </span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+            <el-col :span="24">
+                <div class="el-table-add-row" style="width: 99.2%;" @click="add()"><span>+ 添加</span></div>
+            </el-col>
+        </el-row>
+    </el-dialog>
+    <el-container direction="vertical">
+        <!--    顶栏导航栏-->
+        <el-header class="el-row" style="padding: 0 0 0 0;">
+            <el-menu style="height: 61px;"
+                     ref="topCollapse"
+                     class="el-menu-demo el-col-24"
+                     mode="horizontal"
+                     background-color="#545c64"
+                     text-color="#fff"
+                     active-text-color="#ffd04b">
+
+                <el-row>
+
+                    <!-- 打开侧边导航栏图标 -->
+                    <el-col :span="2" style="width: 63px;height: 61px;">
+                        <el-menu-item class="el-icon-s-unfold" style="font-size: 23px;"
+                                      @click="openOrCloseMenu"></el-menu-item>
+                    </el-col>
+                    <!--  用户登录状态 头像、消息通知-->
+                    <el-col :span="6" style="float: right" class="el-dropdown_style">
+                        <span style="float: right">
+                            <el-dropdown>
+                              <span class="el-dropdown-link">
+                                <span class="userimg">
+                                 <el-badge is-dot class="dot-location"></el-badge>
+                                 <img src="/img/avatar.png" class="el-avatar"/>
+                                </span>
+                                <span class="username">
+                                  {{ user.name }}<i class="el-icon-caret-bottom el-icon--right"></i>
+                                </span>
+                              </span>
+                            <el-dropdown-menu slot="dropdown" class="el-dropdown-menu">
+                                <el-dropdown-item class="el-dropdown-item">
+                                    <el-link :underline="false" type="info" @click.prevent="userInfo">个人信息</el-link>
+                                </el-dropdown-item>
+                                <el-dropdown-item class="el-dropdown-item">
+                                    <el-link :underline="false" type="info" @click.prevent="userMessage">消息</el-link>
+                                    <el-badge class="mark" :value="12"/>
+                                </el-dropdown-item>
+                                <el-dropdown-item class="el-dropdown-item">
+                                    <el-link :underline="false" type="info" @click.prevent="sercurityCenter">安全中心
+                                    </el-link>
+                                    <el-badge class="mark" :value="3"/>
+                                </el-dropdown-item>
+                                <el-dropdown-item class="el-dropdown-item">
+                                    <el-link :underline="false" type="danger" @click.prevent="logout">退出登录</el-link>
+                                </el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                        </span>
+                    </el-col>
+                </el-row>
+            </el-menu>
+        </el-header>
+
+        <!-- Aside 和 main 并列布局   -->
+        <el-container direction="horizontal" style="padding: 0">
+            <el-aside width="auto">
+                <div style="margin-top: 1px;height: calc(100vh - 61px);">
+                    <!--    侧边导航栏-->
+                    <el-menu :default-active="option"
+                             class="el-menu-vertical-demo message" @open="handleOpen" @close="handleClose"
+                             :collapse="isCollapse"
+                             background-color="#545c64"
+                             style="height: calc(100vh - 61px);"
+                             text-color="#fff"
+                             active-text-color="#ffd04b">
+                        <!--  仪表盘-->
+                        <el-menu-item index="1" @click="activeItem(1)">
+                            <i class="iconfont icon-odometer"></i>
+                            <span slot="title" class="menu-font">仪表盘</span>
+                        </el-menu-item>
+
+                        <!--车辆管理-->
+                        <el-menu-item index="2" @click="activeItem(2)">
+                            <i class="iconfont icon-che1-copy"></i>
+                            <span slot="title" class="menu-font" style="padding-left: 6px">车辆管理</span>
+                        </el-menu-item>
+                        <!--用户管理-->
+                        <el-menu-item index="3" @click="activeItem(3)">
+                            <i class="iconfont icon-group"></i>
+                            <span slot="title" class="menu-font">用户管理</span>
+                        </el-menu-item>
+                    </el-menu>
+                </div>
+            </el-aside>
+            <!--   main中垂直布局，并且带滚动条  -->
+            <!--    后台管理显示具体页面的主容器    -->
+            <el-container direction="vertical" style="height: calc(100vh - 61px);">
+                <!---->
+                <el-main v-show="option == 1">
+                    <div class="el-header" style="margin-top: 10px">
+                        仪表盘
+                    </div>
+                </el-main>
+                <el-main v-show="option == 2">
+                    <el-row>
+                        <span class="titleFont sticky">车辆管理</span>
+                        <el-button @click="addRecord">添加记录</el-button>
+                        <el-button @click="batchDelete">批量删除</el-button>
+                    </el-row>
+
+                    <el-table ref="filterTable"
+                              :data="tableData"
+                              @selection-change="handleSelectionChange"
+                              highlight-current-row
+                              style="width: 100%">
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+                        <el-table-column v-for="(v,i) in tableColumn"
+                                         :prop="v.prop"
+                                         sortable
+                                         :label="v.title">
+                            <template slot-scope="scope">
+                            <span v-if="scope.row.isSelected == true">
+                                <el-input size="mini" placeholder="请输入内容" v-model="selectRow[v.prop]">
+                                </el-input>
+                            </span>
+                                <span v-else>{{
+                                    typeof scope.row[v.prop] === 'number' ? formatPrice(scope.row[v.prop]) :scope.row[v.prop]
+                                    }}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                                prop="carStatus"
+                                label="状态"
+                                :filters="[{ text: '待售', value: '待售' }, { text: '已售', value: '已售' }]"
+                                :filter-method="filterStatus"
+                                filter-placement="bottom-end">
+                            <template slot-scope="scope">
+                                <el-tag v-if="scope.row.optionStatus != true"
+                                        :type="scope.row.carStatus === '待售' ? 'primary' : 'success'"
+                                        disable-transitions>{{scope.row.carStatus}}
+                                </el-tag>
+                                <el-select v-else v-model="scope.row.carStatus" placeholder="请选择" size="mini">
+                                    <el-option
+                                            v-for="item in statusEnum"
+                                            :key="item"
+                                            :label="item"
+                                            :value="item">
+                                    </el-option>
+                                </el-select>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                                label="更多">
+                            <template slot-scope="scope">
+                                <el-popover trigger="hover" placement="top" style="width: 180px">
+                                    <el-card :body-style="{ padding: '2px' }">
+                                        <el-upload
+                                                action="aaa"
+                                                class="avatar-uploader"
+                                                :show-file-list="false"
+                                                :http-request="Uploadfile">
+                                            <img v-if="scope.row.carImage!=''" :src="scope.row.carImage"
+                                                 class="avatar">
+                                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                                        </el-upload>
+                                        <div class="carInfo">{{scope.row.carDescription}}</div>
+                                    </el-card>
+                                    <div slot="reference" class="name-wrapper">
+                                        <el-tag size="medium" type="info" effect="dark">{{info}}</el-tag>
+                                    </div>
+                                </el-popover>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" width="180">
+                            <template slot-scope="scope">
+                                <el-button
+                                        v-if="scope.row.isSelected == true"
+                                        size="mini"
+                                        @click="handleSave(scope.$index, scope.row)">保存
+                                </el-button>
+                                <el-button
+                                        v-else
+                                        size="mini"
+                                        @click="handleEdit(scope.$index, scope.row)">编辑
+                                </el-button>
+                                <el-button
+                                        size="mini"
+                                        type="danger"
+                                        @click="handleDelete(scope.$index, scope.row)">删除
+                                </el-button>
+
+                            </template>
+                        </el-table-column>
+                    </el-table>
+
+                    <el-pagination
+                            :page-size="pageSize"
+                            @current-change="changePage"
+                            background
+                            layout="prev, pager, next"
+                            :total="total">
+                    </el-pagination>
+                </el-main>
+                <el-main v-show="option == 3">
+                    用户管理
+                </el-main>
+
+            </el-container>
+        </el-container>
+    </el-container>
+
+</div>
+
+
+<!--引入ElementUI组件必须先引入Vue-->
+<script src="/js/vue.js"></script>
+<!-- 引入ElementUI组件库 -->
+<script src="/js/elementui/index.js"></script>
+<!--cdn引入axios-->
+<script src="/js/axios.min.js"></script>
+<script type="text/javascript">
+    const vm = new Vue({ // 配置对象 options
+        // 配置选项(option)
+        el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
+        data() {
+            return {
+                dialogTableVisible: false,
+                centerDialogVisible: false,
+                value: 1,
+                isCollapse: true,/*展开和关闭侧边菜单栏*/
+                option: '2',
+                user: {
+                    name: '诗水人间'
+                },
+                currentPage: 1,
+                pictureUrl: '',
+                info: '详细信息',
+                tableColumn2: [
+                    {title: '车辆品牌', prop: 'carBrand'},
+                    {title: '类型', prop: 'carType'},
+                    {title: '价格', prop: 'carPrice'},
+                    {title: '上牌时间', prop: 'carRegtime'},
+                    {title: '里程(万公里)', prop: 'carMileage'},
+                    {title: '状态', prop: 'carStatus'},
+                    {title: '地点', prop: 'carArea'},
+                    {title: '其它信息', prop: 'carDescription'},
+                ],
+                selectRow2: null,
+                tableColumn: [
+                    {title: '车辆品牌', prop: 'carBrand'},
+                    {title: '类型', prop: 'carType'},
+                    {title: '价格', prop: 'carPrice'},
+                    {title: '上牌时间', prop: 'carRegtime'},
+                    {title: '里程(万公里)', prop: 'carMileage'},
+                    {title: '地点', prop: 'carArea'},
+                ],
+                multipleSelection: [],/*多选*/
+                selectRow: null,
+                statusEnum: ['待售', '已售'],
+                total: 1,
+                pageSize: 15,
+                gridData: [],
+                tableData: [
+                    {
+                        carBrand: '奥迪',
+                        carType: '越野',
+                        carColor: '军绿色',
+                        carRegtime: '2016-05-01',
+                        carMileage: '2万公里',
+                        carPrice: 13500,
+                        carStatus: '待售',
+                        carDescription: '',
+                        carInfo: ''
+                    },
+                ]
+            };
+        },
+        methods: {
+            addRecord() {
+                this.dialogTableVisible = true
+            },
+            batchDelete() {
+
+            },
+            //添加
+            add() {
+                // for (let i of this.gridData.data) {
+                //     if (i.isSelected) return this.$message.warning("请先保存当前编辑项");
+                // }
+                let j = {
+                    isSelected: false,
+                    carType: '',
+                    carBrand: '',
+                    carPrice: '',
+                    carInfo: '',
+                    carArea: '',
+                    carImage: '',
+                    carRegtime: '',
+                    carMileage: '',
+                    carStatus: ''
+                };
+                this.selectRow2 = JSON.parse(JSON.stringify(j));
+                this.gridData.push(this.selectRow2);
+            },
+            //修改
+            pwdChange(row, index, cg) {
+                row.isSelected = !row.isSelected
+                if (row.isSelected === false) {
+                    row.carImage=this.pictureUrl
+                }
+
+            },
+            //自己编写的函数用于生成文件名，防止上传的文件重名
+            getUUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+                    return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+                })
+            },
+
+            Uploadfile(param) {
+                let file = param.file; // 得到文件的内容
+                console.log(file);
+                //填写获取签名的地址
+                const getPolicyApiUrl = 'http://yumbo.top:7002/asign'; //获取oss签名的地址
+                // 获取oss签名
+                axios({
+                    method: 'get',
+                    url: getPolicyApiUrl,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Access-Control-Allow-Origin': '*',
+                    }
+                }).then((response) => {
+                    if (response.status == 200) {
+                        let policyData = response.data;
+                        console.log(policyData);
+                        /**
+                         ossUrl 换成自己的Bucket的外网地址，
+                         例如 https://human-resource-manage.oss-cn-shenzhen.aliyuncs.com
+                         */
+                        let ossUrl = 'https://yumbo-oss.oss-cn-shenzhen.aliyuncs.com';//填写自己OSS服务器的地址
+                        let accessUrl = policyData.dir + '/' + this.getUUID() + file.name;//设置上传的访问路径
+                        let sendData = new FormData();// 上传文件的data参数
+                        sendData.append('OSSAccessKeyId', policyData.accessid);
+                        sendData.append('policy', policyData.policy);
+                        sendData.append('Signature', policyData.signature);
+                        sendData.append('keys', policyData.dir);
+                        sendData.append('key', accessUrl);//上传的文件路径
+                        sendData.append('success_action_status', 200); // 指定返回的状态码
+                        sendData.append('type', 'image/jpeg');
+                        sendData.append('file', file);
+                        console.log(sendData);
+                        axios.post(ossUrl, sendData).then((res) => {
+                            this.pictureUrl = ossUrl + '/' + accessUrl;//获得到的url需要将其存数据库中
+                            console.log('上传到阿里云的图片地址：' + ossUrl + '/' + accessUrl)
+                        })
+                    }
+                })
+            },
+            formatPrice(price) {
+                return price / 10000 + '万'
+            },
+            toggleSelection(rows) {
+                if (rows) {
+                    rows.forEach(row => {
+                        this.$refs.multipleTable.toggleRowSelection(row);
+                    });
+                } else {
+                    this.$refs.multipleTable.clearSelection();
+                }
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+            },
+            changePage(val) {
+                this.requestData(val, this.pageSize);
+            },
+            openOrCloseMenu() {
+                this.isCollapse = !this.isCollapse;
+            }, activeItem(index) {
+                this.option = index;
+            },
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath)
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath)
+            },
+            filterStatus(value, row) {
+                return row.carStatus === value;
+            },
+            undo() {
+                this.centerDialogVisible = false
+            },
+            ensure() {
+                this.centerDialogVisible = false
+                console.log('delete==>')
+                this.delete(this.selectRow)
+            },
+            filterHandler() {
+
+            }, handleEdit(index, row) {
+                row.isSelected = true;
+                row.optionStatus = true;
+                this.selectRow = row
+                console.log('进行编辑')
+            }, handleSave(index, row) {
+                row.isSelected = false;
+                row.optionStatus = false;
+                console.log('update==>')
+                this.update(row)
+            },
+            handleDelete(index, row) {
+                this.centerDialogVisible = true;
+                row.isSelected = false;
+                this.selectRow = row
+            },
+            update(row) {
+                axios.post('/car/update', row).then(res => {
+                    if (res.data == true) {
+                        this.$message({
+                            message: '更新成功!',
+                            type: 'success'
+                        });
+                    } else {
+                        this.$message.error('更新失败了，请刷新重试!');
+                    }
+                    console.log(res)
+
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+            delete(row) {
+                console.log(row)
+                axios.post('/car/delete', {carId: row.carId}).then(res => {
+                    if (res.data === true) {
+                        this.$notify({
+                            title: '成功',
+                            message: '成功删除!',
+                            type: 'success'
+                        });
+                        this.deleteOne(row)
+                    } else {
+                        this.$notify.error({
+                            title: '失败',
+                            message: '删除失败，请刷新重试'
+                        });
+                    }
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+            deleteOne(row) {
+                let td = []
+                for (let i = 0; i < this.tableData.length; i++) {
+                    if (this.tableData[i].carId != row.carId) {
+                        td.push(this.tableData[i])
+                    }
+                }
+                this.tableData = td
+            },
+            requestData(currentPage, pageSize) {
+                axios({
+                    method: 'get',
+                    url: '/car/all?currentPage=' + currentPage + '&pageSize=' + pageSize,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Access-Control-Allow-Origin': '*',
+                    }
+                }).then(data => {
+                    this.tableData = data.data.list
+                    this.total = data.data.total
+                    console.log(data.data)
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
+        mounted: function () {
+            this.requestData(1, 50);
+        }
+    })
+</script>
+</body>
+</html>
+

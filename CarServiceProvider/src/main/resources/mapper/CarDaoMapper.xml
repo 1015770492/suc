@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace命名空间，为了对sql语句进行隔离，方便管理 ，mapper开发dao方式，使用namespace有特殊作用 -->
+<!-- namespace是当前关联接口的完整路径 -->
+<mapper namespace="top.yumbo.springcloud.car.dao.CarDao">
+    <!-- 在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象
+    mapper.xml以statement为单位管理sql语句
+     -->
+    <select id="getIndexCars" resultType="top.yumbo.springcloud.car.entity.Car">
+        select * from t_car limit 6
+    </select>
+
+    <select id="getAllCars" resultType="top.yumbo.springcloud.car.entity.Car">
+        select * from t_car
+    </select>
+
+    <select id="findCarById" resultType="top.yumbo.springcloud.car.entity.Car">
+        select * from t_car where car_id=#{carId}
+    </select>
+
+    <select id="getSearchCars" resultType="top.yumbo.springcloud.car.entity.Car">
+        select * from t_car where car_description like #{param1}
+    </select>
+
+    <insert id="reserveCar" parameterType="top.yumbo.springcloud.car.entity.Reserve">
+        insert into t_reserve(user_id,car_id,reserve_time,reserve_place,reserve_tel) values(#{userId},#{carId},#{reserveTime},#{reservePlace},#{reserveTel})
+    </insert>
+
+
+    <insert id="addCollection" parameterType="top.yumbo.springcloud.car.entity.Collect">
+        insert into t_collect(user_id,car_id) values(#{userId},#{carId})
+    </insert>
+
+    <select id="checkCollection" resultType="top.yumbo.springcloud.car.entity.Collect">
+        select * from t_collect where user_id=#{user_id} and car_id=#{carId}
+    </select>
+
+    <select id="findUserCollections" resultType="top.yumbo.springcloud.car.entity.Car">
+        select c2.* from t_collect c1,t_car c2 where c1.user_id=#{userId}
+    </select>
+
+    <delete id="delCollection" parameterType="top.yumbo.springcloud.car.entity.Collect">
+        delete from t_collect where user_id=#{userId} and car_id=#{carId}
+    </delete>
+
+</mapper>
+
