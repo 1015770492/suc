@@ -8,11 +8,13 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+
+
 @EnableEurekaClient
 @EnableFeignClients
 @EnableHystrix
 @EnableHystrixDashboard
+@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
 public class CarServiceCallerApplication {
 
     public static void main(String[] args) {
