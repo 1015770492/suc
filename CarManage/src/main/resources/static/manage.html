@@ -641,6 +641,7 @@
             batchAdd() {
                 axios.post('/car/batch/insert', this.gridData).then(res => {
                     if (res.data == true) {
+                        this.gridData=[];// 进行清空
                         this.$message({
                             message: '添加成功!',
                             type: 'success'
@@ -739,11 +740,13 @@
                         console.log(sendData);
                         axios.post(ossUrl, sendData).then((res) => {
                             this.pictureUrl = ossUrl + '/' + accessUrl;//获得到的url需要将其存数据库中
-                            this.updateUrl(param.data.carId, this.pictureUrl)
+                            console.log('上传到阿里云的图片地址：' + ossUrl + '/' + accessUrl)
+                            if (param.data!=null){
+                                this.updateUrl(param.data.carId, this.pictureUrl)
+                            }
                             if (this.selectRow2 != null) {
                                 this.selectRow2.carImage = this.pictureUrl
                             }
-                            console.log('上传到阿里云的图片地址：' + ossUrl + '/' + accessUrl)
                         })
                     }
                 })
