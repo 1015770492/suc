@@ -304,18 +304,18 @@
                              text-color="#fff"
                              active-text-color="#ffd04b">
                         <!--  仪表盘-->
-                        <el-menu-item index="1" @click="activeItem(1)">
+                        <el-menu-item index="1" @click="activeItem('1')">
                             <i class="iconfont icon-odometer"></i>
                             <span slot="title" class="menu-font">仪表盘</span>
                         </el-menu-item>
 
                         <!--车辆管理-->
-                        <el-menu-item index="2" @click="activeItem(2)">
+                        <el-menu-item index="2" @click="activeItem('2')">
                             <i class="iconfont icon-che1-copy"></i>
                             <span slot="title" class="menu-font" style="padding-left: 6px">车辆管理</span>
                         </el-menu-item>
                         <!--用户管理-->
-                        <el-menu-item index="3" @click="activeItem(3)">
+                        <el-menu-item index="3" @click="activeItem('3')">
                             <i class="iconfont icon-group"></i>
                             <span slot="title" class="menu-font">用户管理</span>
                         </el-menu-item>
@@ -344,6 +344,10 @@
                             <el-col :span="12">
                                 <div class="titleFont2">用户来源</div>
                                 <ve-ring :data="ringData.data" :settings="ringData.chartSettings"></ve-ring>
+                            </el-col>
+                            <el-col :span="12">
+                                <div class="titleFont2">各城市二手车销售情况</div>
+                                <ve-radar :data="radarData.data" :settings="radarData.chartSettings"></ve-radar>
                             </el-col>
                         </el-row>
                     </div>
@@ -470,7 +474,12 @@
                     </el-pagination>
                 </el-main>
                 <el-main v-show="option == 3">
-                    用户管理
+                    <el-row>
+                        <span class="titleFont sticky">用户管理</span>
+                    </el-row>
+                    <el-row>
+
+                    </el-row>
                 </el-main>
 
             </el-container>
@@ -490,12 +499,13 @@
 <script src="/js/echarts/line.min.js"></script>
 <script src="/js/echarts/gauge.min.js"></script>
 <script src="/js/echarts/ring.min.js"></script>
+<script src="/js/echarts/radar.min.js"></script>
 
 <script type="text/javascript">
     const vm = new Vue({ // 配置对象 options
         // 配置选项(option)
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
-        components: {VeLine, VeGauge, VeRing},
+        components: {VeLine, VeGauge, VeRing,VeRadar},
         data() {
             return {
                 lineData: {
@@ -519,7 +529,6 @@
                         ]
                     }
                 },
-
                 ringData: {
                     chartSettings: {
                         radius: [50, 100],
@@ -537,6 +546,19 @@
                         ]
                     }
 
+                },
+                radarData:{
+                    data:{
+                        columns: ['城市', '访问用户', '下单用户', '下单率'],
+                        rows: [
+                            { '城市': '厦门', '访问用户': 1393, '下单用户': 1093, '下单率': 0.32 },
+                            { '城市': '北京', '访问用户': 3530, '下单用户': 3230, '下单率': 0.26 },
+                            { '城市': '深圳', '访问用户': 2923, '下单用户': 2623, '下单率': 0.76 },
+                            { '城市': '杭州', '访问用户': 1723, '下单用户': 1423, '下单率': 0.49 },
+                            { '城市': '上海', '访问用户': 3792, '下单用户': 3492, '下单率': 0.323 },
+                            { '城市': '重庆', '访问用户': 4593, '下单用户': 4293, '下单率': 0.78 }
+                        ]
+                    }
                 },
                 dialogTableVisible: false,
                 centerDialogVisible: false,
@@ -573,19 +595,7 @@
                 total: 1,
                 pageSize: 15,
                 gridData: [],
-                tableData: [
-                    {
-                        carBrand: '奥迪',
-                        carType: '越野',
-                        carColor: '军绿色',
-                        carRegtime: '2016-05-01',
-                        carMileage: '2万公里',
-                        carPrice: 13500,
-                        carStatus: '待售',
-                        carDescription: '',
-                        carInfo: ''
-                    },
-                ]
+                tableData: []
             };
         },
         methods: {
@@ -763,7 +773,7 @@
                 this.isCollapse = !this.isCollapse;
                 this.$forceUpdate()
             }, activeItem(index) {
-                if (index == 2) {
+                if (index == '2') {
                     this.requestData(1, 50);
                 }
                 this.option = index;
