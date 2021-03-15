@@ -6,6 +6,7 @@
     <title>管理页面</title>
     <!-- 引入ElementUI样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/css/echarts/style.min.css">
     <style>
 
         /*头像样式*/
@@ -76,6 +77,15 @@
             font-size: 24px;
             color: #2f2e2e;
             margin-right: 20px;
+        }
+
+        .titleFont2 {
+            font-size: 16px;
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'SimHei', 'Arial', 'SimSun';
+            padding: 20px 0;
+            color: #4f4f4f;
+            font-weight: 700;
+            line-height: 26px;
         }
 
         .menu-font {
@@ -317,8 +327,25 @@
             <el-container direction="vertical" style="height: calc(100vh - 61px);">
                 <!---->
                 <el-main v-show="option == 1">
-                    <div class="el-header" style="margin-top: 10px">
-                        仪表盘
+                    <div class="el-header" style="margin-top: 10px;padding-bottom: 50px;">
+                        <el-row>
+                            <span class="titleFont sticky">仪表盘</span>
+                        </el-row>
+
+                        <el-row>
+                            <el-col :span="12">
+                                <div class="titleFont2">销售情况</div>
+                                <ve-line :data="lineData.data" :settings="lineData.chartSettings"></ve-line>
+                            </el-col>
+                            <el-col :span="12">
+                                <div class="titleFont2">销售指标</div>
+                                <ve-gauge :data="gaugeData.data"></ve-gauge>
+                            </el-col>
+                            <el-col :span="12">
+                                <div class="titleFont2">用户来源</div>
+                                <ve-ring :data="ringData.data" :settings="ringData.chartSettings"></ve-ring>
+                            </el-col>
+                        </el-row>
                     </div>
                 </el-main>
                 <el-main v-show="option == 2">
@@ -459,17 +486,63 @@
 <script src="/js/elementui/index.js"></script>
 <!--cdn引入axios-->
 <script src="/js/axios.min.js"></script>
+<script src="/js/echarts/echarts.min.js"></script>
+<script src="/js/echarts/line.min.js"></script>
+<script src="/js/echarts/gauge.min.js"></script>
+<script src="/js/echarts/ring.min.js"></script>
+
 <script type="text/javascript">
     const vm = new Vue({ // 配置对象 options
         // 配置选项(option)
         el: '#app',  // element: 指定用vue来管理页面中的哪个标签区域
+        components: {VeLine, VeGauge, VeRing},
         data() {
             return {
+                lineData: {
+                    data: {
+                        columns: ['日期', '销售额(单位:万元)'],
+                        rows: [
+                            {'日期': '10月', '销售额(单位:万元)': 1723},
+                            {'日期': '11月', '销售额(单位:万元)': 3792},
+                            {'日期': '12月', '销售额(单位:万元)': 4593},
+                            {'日期': '1月', '销售额(单位:万元)': 1393},
+                            {'日期': '2月', '销售额(单位:万元)': 3530},
+                            {'日期': '3月', '销售额(单位:万元)': 2923},
+                        ]
+                    }
+                },
+                gaugeData: {
+                    data: {
+                        columns: ['type', 'a', 'b', 'value'],
+                        rows: [
+                            {type: '指标', value: 80, a: 20, b: 40}
+                        ]
+                    }
+                },
+
+                ringData: {
+                    chartSettings: {
+                        radius: [50, 100],
+                        offsetY: 300
+                    },
+                    data: {
+                        columns: ['类型', '访问用户'],
+                        rows: [
+                            {'类型': '搜索引擎', '访问用户': 4593},
+                            {'类型': '直接访问', '访问用户': 3530},
+                            {'类型': '邮件营销', '访问用户': 1723},
+                            {'类型': '联盟广告', '访问用户': 2923},
+                            {'类型': '视频广告', '访问用户': 3792},
+                            {'类型': '其它', '访问用户': 1393}
+                        ]
+                    }
+
+                },
                 dialogTableVisible: false,
                 centerDialogVisible: false,
                 value: 1,
                 isCollapse: true,/*展开和关闭侧边菜单栏*/
-                option: '2',
+                option: '1',
                 user: {
                     name: '诗水人间'
                 },
@@ -687,7 +760,11 @@
                 this.isCollapse = !this.isCollapse;
                 this.$forceUpdate()
             }, activeItem(index) {
+                if (index == 2) {
+                    this.requestData(1, 50);
+                }
                 this.option = index;
+                this.$forceUpdate()
             },
             handleOpen(key, keyPath) {
                 console.log(key, keyPath)
@@ -817,7 +894,7 @@
             }
         },
         mounted: function () {
-            this.requestData(1, 50);
+
         }
     })
 </script>
