@@ -19,6 +19,6 @@ public class User implements Serializable{
   private String userName;
   private String userPwd;
   private String userArea;
-  private long userTel;
+  private String userTel;
 
 }
