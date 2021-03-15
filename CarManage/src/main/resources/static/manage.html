@@ -348,10 +348,10 @@
                                          sortable
                                          :label="v.title">
                             <template slot-scope="scope">
-                            <span v-if="scope.row.isSelected == true">
+                            <span v-show="scope.row.isSelected == true">
                                 <el-input size="mini" placeholder="请输入内容" v-model="scope.row[v.prop]"></el-input>
                             </span>
-                                <span v-else>{{
+                                <span v-show="scope.row.isSelected != true">{{
                                     typeof scope.row[v.prop] === 'number' ? formatPrice(scope.row[v.prop]) :scope.row[v.prop]
                                     }}</span>
                             </template>
@@ -685,6 +685,7 @@
             },
             openOrCloseMenu() {
                 this.isCollapse = !this.isCollapse;
+                this.$forceUpdate()
             }, activeItem(index) {
                 this.option = index;
             },
@@ -706,6 +707,7 @@
             }, handleSave(index, row) {
                 row.isSelected = false;
                 row.optionStatus = false;
+                this.$forceUpdate();
                 console.log('update==>')
                 this.update(row)
             },
