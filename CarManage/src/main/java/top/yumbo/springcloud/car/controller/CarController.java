@@ -90,4 +90,12 @@ public class CarController {
         return tCarIService.removeByIds(ids.toJavaList(Integer.class));
     }
 
+    @PostMapping("/car/batch/update")
+    @ResponseBody
+    public Boolean updateBatch(@RequestBody String json){
+        System.out.println(json);
+        final List<Car> tCarList = JSONObject.parseArray(json, Car.class);
+        return tCarIService.saveOrUpdateBatch(tCarList);
+    }
+
 }
