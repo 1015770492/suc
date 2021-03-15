@@ -1,5 +1,6 @@
 package top.yumbo.springcloud.car.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -83,9 +84,10 @@ public class CarController {
 
     @PostMapping("/car/batch/delete")
     @ResponseBody
-    public Boolean deleteBatch(List<Integer> ids){
-        System.out.println(ids);
-        return tCarIService.removeByIds(ids);
+    public Boolean deleteBatch(@RequestBody String json){
+        System.out.println(json);
+        final JSONArray ids = JSONObject.parseObject(json).getJSONArray("ids");
+        return tCarIService.removeByIds(ids.toJavaList(Integer.class));
     }
 
 }

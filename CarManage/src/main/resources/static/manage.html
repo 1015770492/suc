@@ -540,12 +540,12 @@
                     cancelButtonText: '取消',
                     type: 'error'
                 }).then(() => {
-                    let ms=this.multipleSelection
-                    let ids=[]
-                    ms.forEach(m=>{
+                    let ms = this.multipleSelection
+                    let ids = []
+                    ms.forEach(m => {
                         ids.push(m.carId)
                     })
-                    this.delete('/car/batch/delete', ids)// 删除数据库中的
+                    this.delete('/car/batch/delete', {ids: ids})// 删除数据库中的
                     this.multipleSelection.forEach(ms => {
                         this.tableData = this.deleteOne(this.tableData, ms) // 删除表中的
                     })
