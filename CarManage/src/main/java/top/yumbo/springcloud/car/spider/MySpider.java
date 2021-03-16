@@ -16,10 +16,8 @@ import java.util.stream.Collectors;
 
 public class MySpider {
     public static void main(String[] args) {
-
-        System.out.println(LocalDate.now());
-
-//        batch();
+//        System.out.println(LocalDate.now());
+        batch();
     }
 
     private static void batch() {
@@ -66,6 +64,6 @@ public class MySpider {
         final HttpEntity<String> reqestEntity = new HttpEntity<>(JSONObject.toJSONString(tCarList), null);
         final RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().set(1, new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        restTemplate.postForObject("http://localhost:8080/car/batch", reqestEntity, String.class);
+        restTemplate.postForObject("http://localhost:8080/car/batch/insert", reqestEntity, String.class);
     }
 }

@@ -13,7 +13,6 @@ import java.io.Serializable;
 @Setter
 @TableName(value = "t_car")
 public class Car implements Serializable {
-
   @TableId
   private long carId;
   private String carType;
@@ -27,6 +26,5 @@ public class Car implements Serializable {
   private String carRegtime;
   private String carMileage;
   private String carStatus;
-
 
 }

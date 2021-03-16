@@ -55,5 +55,25 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
-
+    <!-- springboot 编译插件-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <addResources>true</addResources>
+                    <mainClass>top.yumbo.springcloud.car.CarManageApplication</mainClass><!--主类的路径-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
