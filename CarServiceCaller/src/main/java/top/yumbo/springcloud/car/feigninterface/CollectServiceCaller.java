@@ -9,7 +9,7 @@ import top.yumbo.springcloud.car.entity.Collect;
 
 import java.util.List;
 
-@FeignClient(value = "eureka-client-car-service-provider")
+@FeignClient(value = "CAR-SERVICE-PROVIDER")
 public interface CollectServiceCaller {
 
     @RequestMapping("/collectController/addCollection")

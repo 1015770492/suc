@@ -12,9 +12,9 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: eureka-client-car-service-provider
+    name: CAR-SERVICE-PROVIDER
   datasource:   #数据源
-    url: jdbc:mysql://yumbo.top:3306/sunusedcar?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=GMT%2B8&useSSL=false   #配置数据库
+    url: jdbc:mysql://yumbo.top:3306/sunusedcar?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8   #配置数据库
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: abc123456.

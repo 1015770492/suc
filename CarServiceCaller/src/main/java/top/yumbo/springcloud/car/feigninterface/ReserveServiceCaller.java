@@ -9,7 +9,7 @@ import top.yumbo.springcloud.car.entity.Reserve;
 
 import java.util.List;
 
-@FeignClient(value = "eureka-client-car-service-provider")
+@FeignClient(value = "CAR-SERVICE-PROVIDER")
 public interface ReserveServiceCaller {
 
     @RequestMapping("/reserveController/reserveCar")

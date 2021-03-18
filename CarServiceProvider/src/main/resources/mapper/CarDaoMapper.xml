@@ -13,7 +13,7 @@
     </select>
 
     <select id="getAllCars" resultType="top.yumbo.springcloud.car.entity.Car">
-        select * from t_car where car_status='待售'
+        select * from t_car where car_status='待售' limit 20
     </select>
 
     <select id="findCarById" resultType="top.yumbo.springcloud.car.entity.Car">

@@ -8,4 +8,4 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: oss-service-provider
+    name: OSS-SERVICE-PROVIDER

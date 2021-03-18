@@ -11,7 +11,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   application:
-    name: eureka-client-usedcar-caller
+    name: CAR-SERVICE-CALLER
 #  mvc:
 #    view:
 #      suffix: .jsp

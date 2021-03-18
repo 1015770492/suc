@@ -8,7 +8,7 @@ import top.yumbo.springcloud.car.entity.User;
 
 import java.util.List;
 
-@FeignClient(value = "eureka-client-user1-service-provider")
+@FeignClient(value = "USER-SERVICE-PROVIDER")
 public interface UserServiceCaller {
 
     @RequestMapping("userController/checkLogin")

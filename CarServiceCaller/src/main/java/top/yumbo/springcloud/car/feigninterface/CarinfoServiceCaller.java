@@ -7,7 +7,7 @@ import top.yumbo.springcloud.car.entity.Car;
 
 import java.util.List;
 
-@FeignClient(value = "eureka-client-car-service-provider")//value=“需要调用的服务在注册中心的服务名”
+@FeignClient(value = "CAR-SERVICE-PROVIDER")//value=“需要调用的服务在注册中心的服务名”
 public interface CarinfoServiceCaller {
 
     //接口中方法结构和名字与对应的服务提供者控制器方法的结构和名字一致
