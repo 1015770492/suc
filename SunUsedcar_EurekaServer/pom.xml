@@ -43,7 +43,7 @@
                 <configuration>
                     <fork>true</fork>
                     <addResources>true</addResources>
-                    <mainClass>top.yumbo.springcloud.car.CarServiceProviderApplication</mainClass><!--主类的路径-->
+                    <mainClass>top.yumbo.springcloud.car.EurekaServerApplication</mainClass><!--主类的路径-->
                 </configuration>
                 <executions>
                     <execution>

@@ -1,11 +1,15 @@
 server:
-  port: 7001   #服务端端口
-
+  port: 7001
 eureka:
-  instance:
-    hostname: localhost      #主机名称  192.168.9.52
+  server:
+    enable-self-preservation: false #防止由于Eureka的机制导致Client被错误显示在线 仅在开发环境使用
   client:
-    registerWithEureka: false   #eureka服务器不需要自己给自己注册
-    fetchRegistry: false
-    defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    service-url:
+      defaultZone: http://localhost:7001/eureka/ #这便是此eureka server的应用注册地址
+    register-with-eureka: false #不显示对server应用的注册
+    fetch-registry: false #为了解决 Request execution error. endpoint=DefaultEndpoint{ serviceUrl= 错误
+
+spring:
+  application:
+    name: EUREKA-SERVER
 
