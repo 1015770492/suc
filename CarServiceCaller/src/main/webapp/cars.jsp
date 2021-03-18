@@ -183,7 +183,7 @@
 </div>
 <div class="navigation">
     <div class="nav-cent">
-        <div class="logo"><a href="index.html"><img src="images/logo.png" width="240" /></a></div>
+        <div class="logo"><a href="index.jsp"><img src="images/logo.png" width="240" /></a></div>
         <div class="city"> <span id="DY_site_name" class="red city-name Left">合肥</span>
             <div id="JS_hide_city_menu_11" class="city-select cut_handdler Left"> <a href="javascript:void(0);" class="common-bg selector">切换城市</a>
                 <div id="JS_header_city_bar_box" class="hide_city_group">

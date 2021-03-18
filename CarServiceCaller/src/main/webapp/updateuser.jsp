@@ -188,8 +188,11 @@
             <span class="common-bg city-logo"></span> </div>
         <div class="sea">
             <div class="egc-sea-box">
-                <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" />
-                <a href="#" class="search-btn">搜索</a> </div>
+                <form action="/carinfoController/setKeys" method="get">
+                    <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" name="keys" />
+                    <input type="submit" class="search-btn" value="搜索"></input>
+                </form>
+            </div>
         </div>
         <div class="hot-phone"> <i></i> <span class="js-change-phone">400-877-9288</span> </div>
     </div>
@@ -215,8 +218,11 @@
         </ul>
         <div class="seas">
             <div class="egc-sea-box">
-                <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车">
-                <a href="#" class="search-btn">搜索</a> </div>
+                <form action="/carinfoController/setKeys" method="get">
+                    <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" name="keys" />
+                    <input type="submit" class="search-btn" value="搜索"></input>
+                </form>
+            </div>
         </div>
     </div>
 </div>

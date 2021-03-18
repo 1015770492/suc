@@ -164,10 +164,10 @@
     <div class="stress-close"><a href="javascript:;"></a></div>
     <div class="nav-cents">
         <ul>
-            <li class="logo"><a href="index.html"><img src="images/logo.png"  width="180"/></a></li>
-            <li><a href="index.html">首页</a></li>
-            <li><a href="list.html">我要买车</a></li>
-            <li><a href="wymc.html">我要卖车</a></li>
+            <li class="logo"><a href="index.jsp"><img src="images/logo.png"  width="180"/></a></li>
+            <li><a href="index.jsp">首页</a></li>
+            <li><a href="cars.jsp">我要买车</a></li>
+            <li><a href="#">我要卖车</a></li>
             <li><a href="#">阳光联盟</a></li>
             <li><a href="#">我要加盟</a></li>
         </ul>
