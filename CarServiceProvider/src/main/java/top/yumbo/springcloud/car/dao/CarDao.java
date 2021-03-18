@@ -3,6 +3,7 @@ package top.yumbo.springcloud.car.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+import top.yumbo.springcloud.car.dto.Myreserve;
 import top.yumbo.springcloud.car.entity.Car;
 import top.yumbo.springcloud.car.entity.Collect;
 import top.yumbo.springcloud.car.entity.Reserve;
@@ -17,7 +18,7 @@ public interface CarDao {
 
     public List<Car> getAllCars();//查询所有二手车信息
 
-    public Car findCarById(Integer carId);
+    public Car findCarById(long carId);
 
     public List<Car> getSearchCars(String keys);
 
@@ -25,9 +26,13 @@ public interface CarDao {
 
     public Boolean addCollection(Collect collect);
 
-    public Collect checkCollection(Integer userId,Integer carId);
+    public Collect checkCollection(long userId,long carId);
 
-    public List<Car> findUserCollections(Integer userId);
+    public List<Car> findUserCollections(long userId);
 
-    public Boolean delCollection(Integer userId,Integer carId);
+    public Boolean delCollection(long userId,long carId);
+
+    public List<Myreserve> findMyReservation(long userId);
+
+    public Boolean delReservation(long reserveId);
 }

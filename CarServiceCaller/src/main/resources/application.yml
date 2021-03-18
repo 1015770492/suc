@@ -12,14 +12,20 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: eureka-client-usedcar-caller
-  mvc:
-    view:
-      suffix: .jsp
-      prefix: /
+#  mvc:
+#    view:
+#      suffix: .jsp
+#      prefix: /
+
 
 feign:
   hystrix:
     enabled: true  #打开feign断路器功能
+  client:
+    config:
+      default:
+        connect-timeout: 20000
+        read-timeout: 20000
 
 hystrix:
   command:

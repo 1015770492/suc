@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace命名空间，为了对sql语句进行隔离，方便管理 ，mapper开发dao方式，使用namespace有特殊作用 -->
+<!-- namespace是当前关联接口的完整路径 -->
+<mapper namespace="top.yumbo.springcloud.user.dao.UserDao">
+    <!-- 在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象
+    mapper.xml以statement为单位管理sql语句
+     -->
+    <select id="checkLogin" resultType="top.yumbo.springcloud.car.entity.User">
+        select * from t_user where user_tel=#{param1} and user_pwd=#{param2}
+    </select>
+    <insert id="insertUser" parameterType="top.yumbo.springcloud.car.entity.User">
+        insert into t_user(user_name,user_pwd,user_tel) values(#{userName},#{userPwd},#{userTel})
+    </insert>
+    <select id="selectUserByTel" resultType="top.yumbo.springcloud.car.entity.User">
+        select * from t_user where user_tel=#{param1}
+    </select>
+    <update id="updateUser" parameterType="top.yumbo.springcloud.car.entity.User">
+        update t_user set user_name=#{userName} where user_id=#{userId}
+    </update>
+    <update id="updateUserPwd">
+        update t_user set user_pwd=#{param2} where user_tel=#{param1}
+    </update>
+    <select id="selectCollectCount" resultType="top.yumbo.springcloud.car.entity.Collect">
+        select * from t_collect where user_id=#{param1}
+    </select>
+    <select id="selectCollect" resultType="top.yumbo.springcloud.user.dto.Mycollect">
+        select c2.*,c1.user_id,c1.collect_id from t_car c2 inner join t_collect c1 on  c2.car_id=c1.car_id where c1.user_id=#{param1}
+    </select>
+    <delete id="deletCollect">
+        delete from t_collect where collect_id=#{param1}
+    </delete>
+</mapper>

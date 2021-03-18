@@ -19,7 +19,7 @@ public interface CarinfoServiceCaller {
     List<Car> getAllCars();
 
     @RequestMapping("/carinfoController/getCarDetail")
-    Car findCarById(@RequestParam(value = "car_id") Integer car_id);//对象参数用@RequestBody
+    Car findCarById(@RequestParam(value = "car_id") long car_id);//对象参数用@RequestBody
 
     @RequestMapping("/carinfoController/getSearchCars")
     List<Car> getSearchCars(@RequestParam(value = "keys") String keys);

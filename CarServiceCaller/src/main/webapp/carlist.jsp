@@ -36,7 +36,7 @@
                         "                    <div class='car_desc clearfix'> "+data[i].carInfo+" </div>" +
                         "                    <div class='cs_bt' style='padding-top:7px;'> <span>2020-11-04 15:24  更新</span> </div>" +
                         "                </div>" +
-                        "                <div class='fr priceNum'> ￥<span class='num'>"+data[i].carPrice+" </span><font> 万</font>" +
+                        "                <div class='fr priceNum'> ￥<span class='num'>"+data[i].carPrice/10000+" </span><font> 万元</font>" +
                         "                    <p class='priType-s'> <em class='tag-red'>急售</em> <em class='tag-green'>准新车</em> <em class='tag-yellow'>超值</em> </p>" +
                         "                </div>" +
                         "            </li>";
@@ -46,7 +46,6 @@
 
         })
     </script>
-
 
     <script type="text/javascript">
         $(function(){
@@ -113,7 +112,6 @@
             });
         });
     </script>
-
     <!--搜搜框获取焦点-->
     <script type="text/javascript">
         $(function () {
@@ -154,6 +152,7 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         $(function () {
             var scroll_heitht = $('body').offset().top;
@@ -175,7 +174,14 @@
 <body>
 <div class="egc-top">
     <div class="nav-cent">
-        <div class="top-r"> <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a> </div>
+        <div class="top-r">
+            <c:if test="${sessionScope.loginuser==null}">
+                <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a>
+            </c:if>
+            <c:if test="${sessionScope.loginuser!=null}">
+                欢迎你,${sessionScope.loginuser.userName}|<a href="yhcenter.jsp">个人中心</a>|<a href="userController/nologin" id="b-login" class="b-login">注销</a>
+            </c:if>
+        </div>
         <div class="top-l">全国统一客服热线：400-877-9288</div>
         <div class="clear_fix"></div>
     </div>

@@ -20,6 +20,11 @@ public class CarController {
     @Autowired
     TCarIServiceImpl tCarIService;
 
+    @GetMapping("/")
+    public String index(){
+        return "redirect:car/manage";
+    }
+
     /**
      * @return 后台管理页面
      */

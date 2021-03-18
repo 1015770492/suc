@@ -11,7 +11,7 @@
     <groupId>top.yumbo</groupId>
     <artifactId>CarServiceCaller</artifactId>
     <version>1.0</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <dependencies>
         <!--引入共有实体层-->
         <dependency>
@@ -100,12 +100,6 @@
             <artifactId>standard</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <!-- springboot 编译插件-->
     <build>
@@ -113,6 +107,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version>
                 <configuration>
                     <fork>true</fork>
                     <addResources>true</addResources>
@@ -127,5 +122,22 @@
                 </executions>
             </plugin>
         </plugins>
+        <!-- 指定资源文件的位置，否则maven打包的时候不会jsp页面打包进jar -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <targetPath>META-INF/resources</targetPath>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </resource>
+
+        </resources>
     </build>
 </project>

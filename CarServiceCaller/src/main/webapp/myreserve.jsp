@@ -13,7 +13,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>我的收藏</title>
+    <title>我的预约</title>
     <link rel="stylesheet" type="text/css" href="css/base.css"/>
     <link rel="stylesheet" type="text/css" href="css/home.css"/>
     <link rel="stylesheet" type="text/css" href="css/hurst.css"/>
@@ -228,8 +228,8 @@
         <div class="meb-nav fl dInline">
             <ul class="clearfix">
                 <li><a href="yhcenter.jsp">会员中心</a></li>
-                <li class="on"><a href="mycollect.jsp">我的收藏</a></li>
-                <li><a href="myreserve.jsp">我的预约</a></li>
+                <li><a href="mycollect.jsp">我的收藏</a></li>
+                <li class="on"><a href="myreserve.jsp">我的预约</a></li>
                 <li><a href="updateuser.jsp">账户管理</a></li>
             </ul>
         </div>
@@ -251,7 +251,7 @@
                 $(document).ready(function() {
                     var id=document.getElementById("userid").value;
 
-                    $.get("/userController/selectCollect",{userId:id},function (data) {
+                    $.get("/reserveController/findMyReservation",{userId:id},function (data) {
                         var str="<ul class='cs-list'>";
                         for(var i=0;i<data.length;i++){
                             str=str+"<li class='clearfix' style='position: relative;'>" +
@@ -261,11 +261,11 @@
                                 "<img src='"+data[i].carImage+"' width='300'></a></span>" +
                                 "<div class='carTxt fr dInline'>" +
                                 "<h2><a href='#' target='_blank'>"+data[i].carDescription+"</a></h2>" +
-                                "<span>行驶里程："+data[i].carMileage+"万公里</span></p>" +
+                                "<span>预约时间："+data[i].reserveTime+"</span></p>" +
                                 "<div class='price clearfix'style='margin:5px 0;'><div class='fl dInline pNum'>" +
-                                "<font>一口价</font><br><span class='num nBlue'>"+data[i].carPrice/10000+"</span><font>万元</font>" +
+                                "<font>看车地点:</font><br><span class='num nBlue'>"+data[i].reservePlace+"</span>" +
                                 " </div></div><div class='cs_bt clearfix'><a href='#' class='cs-q'>立即抢订</a>" +
-                                "<a href='/userController/deleteCollect?collectId="+data[i].collectId+"'>取消收藏</a></div></div></li>"
+                                "<a href='/reserveController/delReservation?reserveId="+data[i].reserveId+"'>取消预约</a></div></div></li>"
                         }
                         str=str+"</ul>";
                         $("#t1").html(str);
@@ -276,7 +276,7 @@
             <input type="hidden" id="userid" value="${sessionScope.loginuser.userId}">
             <div class="mr-detail">
                 <div class="mr-tab clearfix">
-                    <a class="on">我收藏的车型</a>
+                    <a href="myreserve.jsp" class="on">我的预约记录</a>
                 </div>
 
                 <div class="me-box">

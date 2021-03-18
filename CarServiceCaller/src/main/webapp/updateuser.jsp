@@ -1,19 +1,18 @@
 <%--
   Created by IntelliJ IDEA.
-  User: 张昕
-  Date: 2021/3/13
-  Time: 15:45
+  User: dell
+  Date: 2021/3/16
+  Time: 9:37
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>我的收藏</title>
+    <title>阳光好车</title>
     <link rel="stylesheet" type="text/css" href="css/base.css"/>
     <link rel="stylesheet" type="text/css" href="css/home.css"/>
     <link rel="stylesheet" type="text/css" href="css/hurst.css"/>
@@ -149,9 +148,9 @@
     </script>
 </head>
 <body>
+<c:if test="${sessionScope.loginuser!=null}">
 <div class="egc-top">
     <div class="nav-cent">
-        <c:if test="${sessionScope.loginuser!=null}">
         <div class="top-r"> <a href="#" id="b-regist">${sessionScope.loginuser.userName}</a>|<a href="/userController/nologin" id="b-login" class="b-login">退出</a> </div>
         <div class="top-l">全国统一客服热线：400-877-9288</div>
         <div class="clear_fix"></div>
@@ -196,9 +195,9 @@
     </div>
 </div>
 <ul class="navmenu">
-    <li class="active"><a href="index.html">首页</a><span></span></li>
-    <li><a href="list.html">我要买车</a><span></span></li>
-    <li><a href="wymc.html">我要卖车</a><span></span></li>
+    <li class="active"><a href="index.jsp">首页</a><span></span></li>
+    <li><a href="cars.jsp">我要买车</a><span></span></li>
+    <li><a href="#">我要卖车</a><span></span></li>
     <li><a href="#">阳光联盟</a><span></span></li>
     <li><a href="#">我要加盟</a><span></span></li>
 </ul>
@@ -207,10 +206,10 @@
     <div class="stress-close"><a href="javascript:;"></a></div>
     <div class="nav-cents">
         <ul>
-            <li class="logo"><a href="index.html"><img src="images/logo.png"  width="180"/></a></li>
-            <li><a href="index.html">首页</a></li>
-            <li><a href="list.html">我要买车</a></li>
-            <li><a href="wymc.html">我要卖车</a></li>
+            <li class="logo"><a href="index.jsp"><img src="images/logo.png"  width="180"/></a></li>
+            <li><a href="index.jsp">首页</a></li>
+            <li><a href="cars.jsp">我要买车</a></li>
+            <li><a href="#">我要卖车</a></li>
             <li><a href="#">阳光联盟</a></li>
             <li><a href="#">我要加盟</a></li>
         </ul>
@@ -228,9 +227,9 @@
         <div class="meb-nav fl dInline">
             <ul class="clearfix">
                 <li><a href="yhcenter.jsp">会员中心</a></li>
-                <li class="on"><a href="mycollect.jsp">我的收藏</a></li>
+                <li><a href="mycollect.jsp">我的收藏</a></li>
                 <li><a href="myreserve.jsp">我的预约</a></li>
-                <li><a href="updateuser.jsp">账户管理</a></li>
+                <li class="on"><a href="updateuser.jsp">账户管理</a></li>
             </ul>
         </div>
         <div class="meb-right fr dInline">
@@ -242,48 +241,147 @@
                     <div class="mr-infor fl dInline">
                         <h2>中午好，尊敬的会员 <b>${sessionScope.loginuser.userName}</b></h2>
                         <p>
-                            手机：${sessionScope.loginuser.userTel}     |  [ <a href="yhcenter.jsp">管理账户信息</a> ]
+                            手机：${sessionScope.loginuser.userTel}    |  [ <a href="updateuser.jsp">管理账户信息</a> ]
                         </p>
                     </div>
                 </div>
             </div>
-            <script >
-                $(document).ready(function() {
-                    var id=document.getElementById("userid").value;
-
-                    $.get("/userController/selectCollect",{userId:id},function (data) {
-                        var str="<ul class='cs-list'>";
-                        for(var i=0;i<data.length;i++){
-                            str=str+"<li class='clearfix' style='position: relative;'>" +
-                                "<span class='carImg fl dInline'>" +
-                                "<a href='#' target='_blank'>" +
-                                "<div class='car_bg'> </div>" +
-                                "<img src='"+data[i].carImage+"' width='300'></a></span>" +
-                                "<div class='carTxt fr dInline'>" +
-                                "<h2><a href='#' target='_blank'>"+data[i].carDescription+"</a></h2>" +
-                                "<span>行驶里程："+data[i].carMileage+"万公里</span></p>" +
-                                "<div class='price clearfix'style='margin:5px 0;'><div class='fl dInline pNum'>" +
-                                "<font>一口价</font><br><span class='num nBlue'>"+data[i].carPrice/10000+"</span><font>万元</font>" +
-                                " </div></div><div class='cs_bt clearfix'><a href='#' class='cs-q'>立即抢订</a>" +
-                                "<a href='/userController/deleteCollect?collectId="+data[i].collectId+"'>取消收藏</a></div></div></li>"
-                        }
-                        str=str+"</ul>";
-                        $("#t1").html(str);
-                    });
-                });
-
-            </script>
-            <input type="hidden" id="userid" value="${sessionScope.loginuser.userId}">
             <div class="mr-detail">
                 <div class="mr-tab clearfix">
-                    <a class="on">我收藏的车型</a>
+                    <a class="on">个人资料管理 </a>
+                    <a>修改密码</a>
                 </div>
-
-                <div class="me-box">
-                    <div class="me-dl" style="display: block;">
-                        <div class="me-one" id="me-four" >
-                            <div id="t1"></div>
-                            <div class="hPages">  </div>
+                <div class="me-box me-box1">
+                    <div class="me-dl" style="display:block;">
+                        <div class="me-one">
+                            <div class="accForm">
+                                <form action="/userController/updateUser" enctype="multipart/form-data" name="editM" method="post" >
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                            手机号码
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="text" class="ar-txt" name="userTel" id="userTel" placeholder="请输入手机号码" value="${sessionScope.loginuser.userTel}" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                            姓名
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="text" class="ar-txt" onblur="checkname()" name="userName" id="username" placeholder="请输入您的姓名" value="${sessionScope.loginuser.userName}"><span id="tip1"></span>
+                                        </div>
+                                    </div>
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="submit" value="提 交" class="ar-btn" onclick="return checkup1()">
+                                        </div>
+                                    </div>
+                                </form>
+                                <script >
+                                    function checkname() {
+                                        var name=document.getElementById("username");
+                                        if(name==""||name==null){
+                                            return false;
+                                            $("#tip1").html("用户名不能为空")
+                                        }else{
+                                            return true;
+                                        }
+                                    }
+                                    function  checkup1 (){
+                                        return checkname();
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        var Ypass=/\S{6,}/;
+                        var flag1=false;
+                        function checkusertel1() {
+                              var tel1=document.getElementById("userTel1").value;
+                              var pwd1=document.getElementById("pwd1").value;
+                              if(pwd1==""||pwd1==null||Ypass.test(pwd1)==false){
+                                  $("#tip2").html("原密码密码不正确");
+                                  return false;
+                              }else {
+                                  $.get("/userController/checkPwd",{userTel:tel1,userPwd:pwd1},function (data) {
+                                    if(data=="ok"){
+                                        $("#tip2").html("");
+                                        flag1=true;
+                                    }else{
+                                        $("#tip2").html("原密码密码不正确");
+                                        flag1=false;
+                                    }
+                                  });
+                                  return true;
+                              }
+                        }
+                        function newpwd1() {
+                                var pwd2=document.getElementById("pwd2").value;
+                                if(pwd2==""||pwd2==null||Ypass.test(pwd2)==false){
+                                    $("#tip3").html("密码格式不正确，必须以字母开头的6-16 字母，数字");
+                                    return false;
+                                }else{
+                                    $("#tip3").html("");
+                                    return true;
+                                }
+                        }
+                        function newpwd2() {
+                            var pwd1=document.getElementById("pwd2").value;
+                            var pwd2=document.getElementById("pwd3").value;
+                            if(pwd1==pwd2){
+                                $("#tip4").html("");
+                                return true;
+                            }else{
+                                $("#tip4").html("请输入相同密码");
+                                return false;
+                            }
+                        }
+                        function checkuppwd() {
+                          return flag1&checkusertel1()&newpwd1()&newpwd2();
+                        }
+                    </script>
+                    <div class="me-dl" style="display:none;">
+                        <div class="me-one">
+                            <div class="accForm">
+                                <form action="/userController/updatePwd" enctype="multipart/form-data" name="editP" method="post" >
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                            当前密码
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="text" id="userTel1" value="${sessionScope.loginuser.userTel}"name="userTel" hidden="true">
+                                            <input type="password" id="pwd1" class="ar-txt" name="password" placeholder="请输入当前密码" onblur="checkusertel1()"><span id="tip2"></span>
+                                        </div>
+                                    </div>
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                            新密码
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="password" class="ar-txt" id="pwd2" name="userPwd" placeholder="请输入新密码" onblur="newpwd1()"><span id="tip3"></span>
+                                        </div>
+                                    </div>
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                            确认新密码
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="password" class="ar-txt" id="pwd3" name="password2" placeholder="请确认输入的新密码" onblur="newpwd2()"><span id="tip4"></span>
+                                        </div>
+                                    </div>
+                                    <div class="afl clearfix">
+                                        <label class="fl">
+                                        </label>
+                                        <div class="af-r fl dInline">
+                                            <input type="submit" value="提 交" class="ar-btn" onclick="return checkuppwd()">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -303,7 +401,7 @@
                 </div>
                 <div class="items">
                     <div class="tit"><i class="icon-angle-right"></i>客服中心</div>
-                    <div class="con"> <a href="abut.html">网站合作</a> <a href="about.html">关于我们</a> <a href="contact.html">联系我们</a> </div>
+                    <div class="con"> <a href="#">网站合作</a> <a href="#">关于我们</a> <a href="#">联系我们</a> </div>
                 </div>
                 <div class="items">
                     <div class="tit"><i class="icon-angle-right"></i>购车指南</div>
@@ -337,209 +435,14 @@
 
 <!--会员登录和注册弹出框结束-->
 <script type="text/javascript">
-    $('.mr-tab a').each(function(index){
-        $(this).click(function(){
-            $(this).addClass('on').siblings().removeClass('on');
-            $('.me-dl').eq(index).show().siblings().hide();
-        })
-    });
-    $('.cs_ding a').mouseover(function(){
-        this.style.color='blue';
+    $(function(){
+        $('.mr-tab a').each(function(index){
+            $(this).click(function(){
+                $(this).addClass('on').siblings().removeClass('on');
+                $('.me-dl').eq(index).show().siblings().hide();
+            })
+        });
     })
-    $('.cs_ding a').mouseout(function(){
-        this.style.color='#4573af';
-    })
-    function clsub(id){
-        $('#memId').val(id);
-        var url='/Member/getCardImg/channel/7.html';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {id:id},
-            dataType: "json",
-            success: function(data){
-                if(data.idcarda){
-                    document.getElementById("imgPreview1").src = data.idcarda;
-                }else{
-                    document.getElementById("imgPreview1").src = 'images/qzx.jpg';
-                }
-                if(data.idcardb){
-                    document.getElementById("imgPreview2").src = data.idcardb;
-                }else{
-                    document.getElementById("imgPreview2").src = 'images/qzx.jpg';
-                }
-            }
-        });
-        $overlay = $('.overlay');
-        $overlay.addClass('active');
-        $('.popup-over').show().addClass('active');
-        $overlay.click(function(){
-            modalHidden($whichPopup);
-        });
-        var $whichPopup = $('.popup-over');
-        $('.popup-over').show().addClass('active');
-        $overlay.click(function(){
-            modalHidden($whichPopup);
-        });
-        $('.overBtn').click(function(){
-            modalHidden($whichPopup);
-        });
-        $whichPopup.click(function(e){
-            e.stopPropagation();
-        });
-        function modalHidden($ele) {
-            $ele.removeClass('active');
-            $overlay.removeClass('active');
-        }
-
-    }
-
-    function subc(){
-        var postfile1=uploadIdForm.postfile1.value;
-        var postfile2=uploadIdForm.postfile2.value;
-        var memId=uploadIdForm.memId.value;
-        var url='/Member/cardImg/channel/7.html';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {postfile1:postfile1, postfile2:postfile2,memId:memId},
-            dataType: "json",
-            headers:{'ClientCallMode':'ajax'},
-            data:$('#formid').serialize(),
-            success: function(data){
-                if(data.result=='1'){
-                    alert('添加成功');
-                }else{
-                    alert('添加失败');
-                    window.location.reload();
-                }
-            }
-        });
-        return false;
-    }
-    $('.auth').click(function(){
-        $('.ver_dialog').fadeIn();
-    })
-    $('.ui-dialog-close').click(function(){
-        $('.ver_dialog').fadeOut();
-    })
-    $('#me-one .hPages a').live('click',function(){
-        var url=$(this).attr('href');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {type:'LSDZ'},
-            success: function(data){
-                $('#me-one').html(data);
-            }
-        });
-        return false;
-    })
-    $('#me-tow .hPages a').live('click',function(){
-        var url=$(this).attr('href');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {type:'SELL'},
-            success: function(data){
-                $('#me-tow').html(data);
-            }
-        });
-        return false;
-    })
-    $('#me-three .hPages a').live('click',function(){
-        var url=$(this).attr('href');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {type:'APPLY'},
-            success: function(data){
-                $('#me-three').html(data);
-            }
-        });
-        return false;
-    })
-    $('#me-four .hPages a').live('click',function(){
-        var url=$(this).attr('href');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {type:'CONCERN'},
-            success: function(data){
-                $('#me-four').html(data);
-            }
-        });
-        return false;
-    })
-    $('#me-o .hPages a').live('click',function(){
-        var url=$(this).attr('href');
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {type:'ORDER'},
-            success: function(data){
-                $('#me-o').html(data);
-            }
-        });
-        return false;
-    })
-    $('#p_closedziliao').click(function(){
-        $('.overlay').removeClass('active');
-    })
-
-    function delNeed(act,meb){
-        var url='/Member/delNeed/channel/7.html';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {act:act,meb:meb},
-            success: function(data){
-                if(data.result){
-                    alert('已取消该需求');
-                    window.location.reload();
-                }else{
-                    alert('需求操作失败');
-                    window.location.reload();
-                }
-            }
-        });
-        return false;
-    }
-    function delNeedThis(carid){
-        var url='/Member/delCondent/channel/7.html';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {carid:carid},
-            success: function(data){
-                if(data.result){
-                    alert('已取消该收藏');
-                    window.location.href="/Member/need/channel/7/list/11/tpl/4";
-                }else{
-                    alert('收藏取消失败');
-                }
-            }
-        });
-        return false;
-    }
-
-    function delOrder(act,meb){
-        var url='/Member/delOrder/channel/7.html';
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {act:act,meb:meb},
-            success: function(data){
-                if(data.result){
-                    alert('已取消该订单');
-                    window.location.reload();
-                }else{
-                    alert('订单取消失败');
-                }
-            }
-        });
-        return false;
-    }
 </script>
 </c:if>
 <%--<c:if test="${sessionScope.loginuser==null}">--%>
@@ -547,7 +450,6 @@
         <%--$(document).ready(function () {--%>
             <%--location.href="../index.jsp";--%>
         <%--});--%>
-
     <%--</script>--%>
 <%--</c:if>--%>
 </body>

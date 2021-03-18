@@ -31,7 +31,7 @@ public class CarinfoController {
 
     @RequestMapping("/getCarDetail")
     @ResponseBody
-    public Car findCarById(@RequestParam Integer car_id){
+    public Car findCarById(@RequestParam long car_id){
         return carBiz.findCarById(car_id);
     }
 

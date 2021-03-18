@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -30,8 +31,8 @@
                     str=str+"<li>" +
                         "                    <div class='list-infoBox'> <a title='"+data[i].carDescription+"' target='_blank' class='imgtype' href='carinfoController/getCarDetail?car_id="+data[i].carId+"'> <img width='290' height='194' src='"+data[i].carImage+"' alt='"+data[i].carDescription+"'> </a>" +
                         "                        <p class='infoBox'> <a  title='"+data[i].carDescription+"' href='carinfoController/getCarDetail?car_id="+data[i].carId+"' target='_blank' class='info-title'>"+data[i].carDescription+"</a> </p>" +
-                        "                        <p class='fc-gray'> <span class='tag-gray'>"+data[i].carArea+"</span> <span class=''>"+data[i].carRegtime+"</span> <em class='shuxian'>|</em> "+data[i].carMileage+" </p>" +
-                        "                        <p class='priType-s'> <span> <i class='fc-org priType'> "+data[i].carPrice+" </i> </span> <s>3.40万</s> </p>" +
+                        "                        <p class='fc-gray'> <span class='tag-gray'>"+data[i].carArea+"</span> <span class=''>"+data[i].carRegtime+"上牌</span> <em class='shuxian'>|</em> "+data[i].carMileage+"万公里 </p>" +
+                        "                        <p class='priType-s'> <span> <i class='fc-org priType'> "+data[i].carPrice/10000+"万元 </i> </span> <s>3.40万</s> </p>" +
                         "                    </div>" +
                         "                </li>"
                 }
@@ -106,7 +107,6 @@
             });
         });
     </script>
-
     <!--搜搜框获取焦点-->
     <script type="text/javascript">
         $(function () {
@@ -147,6 +147,7 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         $(function () {
             var scroll_heitht = $('body').offset().top;
@@ -168,7 +169,14 @@
 <body>
 <div class="egc-top">
     <div class="nav-cent">
-        <div class="top-r"> <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a> </div>
+        <div class="top-r">
+            <c:if test="${sessionScope.loginuser==null}">
+                <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a>
+            </c:if>
+            <c:if test="${sessionScope.loginuser!=null}">
+                欢迎你,${sessionScope.loginuser.userName}|<a href="yhcenter.jsp">个人中心</a>|<a href="userController/nologin" id="b-login" class="b-login">注销</a>
+            </c:if>
+        </div>
         <div class="top-l">全国统一客服热线：400-877-9288</div>
         <div class="clear_fix"></div>
     </div>
@@ -205,16 +213,19 @@
             <span class="common-bg city-logo"></span> </div>
         <div class="sea">
             <div class="egc-sea-box">
-                <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" />
-                <a href="#" class="search-btn">搜索</a> </div>
+                <form action="/carinfoController/setKeys" method="get">
+                    <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" name="keys" />
+                    <input type="submit" class="search-btn" value="搜索"></input>
+                </form>
+            </div>
         </div>
         <div class="hot-phone"> <i></i> <span class="js-change-phone">400-877-9288</span> </div>
     </div>
 </div>
 <ul class="navmenu">
-    <li class="active"><a href="index.html">首页</a><span></span></li>
-    <li><a href="list.html">我要买车</a><span></span></li>
-    <li><a href="wymc.html">我要卖车</a><span></span></li>
+    <li class="active"><a href="index.jsp">首页</a><span></span></li>
+    <li><a href="cars.jsp">我要买车</a><span></span></li>
+    <li><a href="#">我要卖车</a><span></span></li>
     <li><a href="#">阳光联盟</a><span></span></li>
     <li><a href="#">我要加盟</a><span></span></li>
 </ul>
@@ -223,17 +234,20 @@
     <div class="stress-close"><a href="javascript:;"></a></div>
     <div class="nav-cents">
         <ul>
-            <li class="logo"><a href="index.html"><img src="images/logo.png"  width="180"/></a></li>
-            <li><a href="index.html">首页</a></li>
-            <li><a href="list.html">我要买车</a></li>
-            <li><a href="wymc.html">我要卖车</a></li>
+            <li class="logo"><a href="index.jsp"><img src="images/logo.png"  width="180"/></a></li>
+            <li><a href="index.jsp">首页</a></li>
+            <li><a href="cars.jsp">我要买车</a></li>
+            <li><a href="#">我要卖车</a></li>
             <li><a href="#">阳光联盟</a></li>
             <li><a href="#">我要加盟</a></li>
         </ul>
         <div class="seas">
             <div class="egc-sea-box">
-                <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车">
-                <a href="#" class="search-btn">搜索</a> </div>
+                <form action="/carinfoController/setKeys" method="get">
+                    <input type="text" class="sea-ipt-txt" placeholder="搜索您想要的车" name="keys" />
+                    <input type="submit" class="search-btn" value="搜索"></input>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -569,58 +583,137 @@
     <div class="popCont"> <a class="p_closed">关闭</a>
         <div class="p-tab"> <a>会员登录<i></i></a><a>会员注册<i></i></a> </div>
         <div class="p-detail">
+            <!--登录表单-->
             <div class="p-dl">
-                <form onsubmit="return check();" enctype="multipart/form-data" method="post" name="form" id="form">
+                <form action="/userController/checkLogin" enctype="multipart/form-data" method="post" name="form" id="form">
                     <ul class="login-items">
                         <li>
-                            <label>用户名(手机号)</label>
-                            <input class="input" type="text" value="" maxlength="32"  name="username" placeholder="请输入您的手机号">
+                            <label>手机号</label>
+                            <input class="input" type="text" id="userTel" onblur="yztel()" maxlength="32"  name="userTel" placeholder="请输入您的手机号"><span id="tip1"></span>
                         </li>
                         <li>
                             <label>密码</label>
-                            <input class="input" type="password" value="" maxlength="16"  name="password">
+                            <input class="input" type="password" id="userPwd" maxlength="16" onblur="yzpwd()" name="userPwd"> <span id="tip2"></span>
                         </li>
                     </ul>
-                    <div class="login-check">
-                        <input type="checkbox" name="checkbox" style=" width:auto;" />
-                        <label>记住我</label>
-                        <a href="Meet/editPass">忘记登录密码？</a> </div>
                     <div class="login-button">
                         <input type="hidden" value="" name="carid" class="ordercarid" />
                         <input type="hidden" value="" name="carstatus" class="orderstatus" />
-                        <input type="button"  value="登&nbsp;&nbsp;&nbsp;&nbsp;陆" class="fM" onclick="$('#form').submit()" />
+                        <input type="submit"  value="登&nbsp;&nbsp;&nbsp;&nbsp;陆" class="fM" onclick="return cheack1()" />
                     </div>
+                    <!---校验-->
                 </form>
             </div>
+            <script>
+                var role=/^1[3456789]\d{9}$/;
+                function yztel() {
+                    var usertel=document.getElementById("userTel").value;
+                    if(usertel==""||usertel==null){
+                        $("#tip1").html("手机号不能为空");
+                        return false;
+                    }else{
+                        if(role.test(usertel)==false){
+                            $("#tip1").html("请输入正确手机号");
+                            return false;
+                        }else{
+                            $("#tip1").html("");
+                            return true;
+                        }
+                    }
+                }
+                function yzpwd() {
+                    var userpwd=document.getElementById("userPwd").value;
+                    var Ypass=/\S{6,}/;
+                    if(userpwd==""||userpwd==null||Ypass.test(userpwd)==false){
+                        $("#tip2").html("密码格式不正确，必须以字母开头的6-16 字母，数字");
+
+                        return false;
+                    }else{
+                        $("#tip2").html("");
+                        return true;
+                    }
+                }
+                function yzpwd1() {
+                    var userpwd=document.getElementById("pwd1").value;
+                    if(userpwd==""||userpwd==null||Ypass.test(userpwd)==false){
+                        $("#tip5").html("密码格式不正确，必须以字母开头的6-16 字母，数字");
+
+                        return false;
+                    }else{
+                        $("#tip5").html("");
+                        return true;
+                    }
+                }
+                function cheack1(){
+                    return yztel()&yzpwd();
+                }
+            </script>
+            <!--注册表单-->
             <div class="p-dl">
-                <form class="registForm" onsubmit="return regcheck();" enctype="multipart/form-data" method="post" name="reg" id="reg">
+                <form class="registForm" action="/userController/insertUser" enctype="multipart/form-data" method="post" name="reg" id="reg">
                     <ul class="login-items">
                         <li class="clearfix">
-                            <input class="input" name="mobile" id="mobile" type="text" value="" placeholder="手机号码（登录帐号）">
+                            <input class="input" name="userTel" id="tel1" type="text" onblur="yztel1()" placeholder="手机号码（登录帐号）"><span id="tip3"></span>
                         </li>
                         <li class="clearfix">
-                            <input class="input left" type="text" value=""  name="verify" placeholder="输入验证码" style="width:100px;" />
-                            <div id="send"><a href="#" class="send_code right">获取验证码</a></div>
+
                         </li>
                         <li class="clearfix">
-                            <input class="input" type="text" value=""  name="realname" placeholder="姓名">
+                            <input class="input" type="text" id="name1" name="userName" placeholder="姓名" onblur="yzname()"><span id="tip4"></span>
                         </li>
-                        <li class="clearfix sex">
-                            <input type="radio" checked="" name="gender" value="M" />
-                            男&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="gender" value="F" />
-                            女 </li>
+
                         <li class="clearfix">
-                            <input id="" class="input" type="password" name="password" value="" placeholder="输入密码（六位字符）">
+                            <input id="pwd1" class="input" type="password" name="userPwd" onblur="yzpwd()" placeholder="输入密码"><span id="tip5"></span>
                         </li>
                     </ul>
                     <div class="login-button">
                         <input type="hidden" value="" name="carid" class="ordercarid" />
                         <input type="hidden" value="" name="carstatus" class="orderstatus" />
-                        <input type="button"  value="立即注册" class="fM" onclick="$('#reg').submit()" />
+                        <input type="submit"  value="立即注册" class="fM" onclick="return check2()" />
                     </div>
                 </form>
             </div>
+            <script>
+                var flag1=false;
+                function  yztel1(){
+                    var tel=document.getElementById("tel1").value;
+                    if(tel==""||tel==null){
+                        $("#tip3").html("手机号不能为空");
+                        return false;
+                    }
+                    else{
+                        if(role.test(tel)==false){
+                            $("#tip3").html("请输入正确手机号");
+                            return false;
+                        }else{
+                            $.get("/userController/selectUserByTel",{userTel:tel},function (data) {
+                                if(data=="ok"){
+                                    $("#tip3").html("该手机号已被注册手机号");
+                                    flag1=false;
+                                }else{
+                                    $("#tip3").html("");
+                                    flag1=true;
+                                }
+                            });
+                            return true;
+                        }
+                    }
+                }
+                function yzname(){
+                    var name=document.getElementById("name1").value;
+                    if(name==""||name==null){
+                        $("#tip4").html("用户名不能为空");
+                        return false;
+                    }else {
+                        $("#tip4").html("");
+                        return true;
+                    }
+
+                }
+                function  check2() {
+                    return yztel1()&yzname()&yzpwd1();
+                }
+            </script>
         </div>
     </div>
 </div>

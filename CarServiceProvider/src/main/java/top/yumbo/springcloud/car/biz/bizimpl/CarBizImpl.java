@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.yumbo.springcloud.car.biz.CarBiz;
 import top.yumbo.springcloud.car.dao.CarDao;
+import top.yumbo.springcloud.car.dto.Myreserve;
 import top.yumbo.springcloud.car.entity.Car;
 import top.yumbo.springcloud.car.entity.Collect;
 import top.yumbo.springcloud.car.entity.Reserve;
@@ -26,7 +27,7 @@ public class CarBizImpl implements CarBiz {
     }
 
     @Override
-    public Car findCarById(Integer carId) {
+    public Car findCarById(long carId) {
         return carDao.findCarById(carId);
     }
 
@@ -46,17 +47,29 @@ public class CarBizImpl implements CarBiz {
     }
 
     @Override
-    public Collect checkCollection(Integer userId, Integer carId) {
+    public Collect checkCollection(long userId, long carId) {
         return carDao.checkCollection(userId, carId);
     }
 
     @Override
-    public List<Car> findUserCollections(Integer userId) {
+    public List<Car> findUserCollections(long userId) {
         return carDao.findUserCollections(userId);
     }
 
     @Override
-    public Boolean delCollection(Integer userId, Integer carId) {
+    public Boolean delCollection(long userId, long carId) {
         return carDao.delCollection(userId,carId);
     }
+
+    @Override
+    public List<Myreserve> findMyReservation(long userId) {
+        return carDao.findMyReservation(userId);
+    }
+
+    @Override
+    public Boolean delReservation(long reserveId) {
+        return carDao.delReservation(reserveId);
+    }
+
+
 }

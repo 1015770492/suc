@@ -1,2 +1,11 @@
 server:
   port: 7002
+eureka:
+  client:
+    service-url:
+      defaultZone: http://yumbo.top:7001/eureka/   #要连接的注册中心（eureka服务器）地址
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: oss-service-provider

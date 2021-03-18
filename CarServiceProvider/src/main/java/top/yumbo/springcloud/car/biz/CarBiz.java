@@ -1,6 +1,7 @@
 package top.yumbo.springcloud.car.biz;
 
 
+import top.yumbo.springcloud.car.dto.Myreserve;
 import top.yumbo.springcloud.car.entity.Car;
 import top.yumbo.springcloud.car.entity.Collect;
 import top.yumbo.springcloud.car.entity.Reserve;
@@ -13,7 +14,7 @@ public interface CarBiz {
 
     List<Car> getAllCars();
 
-    Car findCarById(Integer carId);
+    Car findCarById(long carId);
 
     List<Car> getSearchCars(String keys);
 
@@ -21,9 +22,13 @@ public interface CarBiz {
 
     Boolean addCollection(Collect collect);
 
-    Collect checkCollection(Integer userId, Integer carId);
+    Collect checkCollection(long userId, long carId);
 
-    List<Car> findUserCollections(Integer userId);
+    List<Car> findUserCollections(long userId);
 
-    Boolean delCollection(Integer userId, Integer carId);
+    Boolean delCollection(long userId, long carId);
+
+    public List<Myreserve> findMyReservation(long userId);
+
+    public Boolean delReservation(long reserveId);
 }

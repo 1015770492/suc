@@ -52,7 +52,7 @@ public class CarinfoController {
 
     @RequestMapping("/getCarDetail")
     @ResponseBody
-    public void getCarDetail(Integer car_id, HttpSession session,HttpServletResponse response) throws IOException {
+    public void getCarDetail(long car_id, HttpSession session,HttpServletResponse response) throws IOException {
         Car car=carinfoServiceCaller.findCarById(car_id);
         session.setAttribute("car",car);
         response.sendRedirect("/cardetail.jsp");

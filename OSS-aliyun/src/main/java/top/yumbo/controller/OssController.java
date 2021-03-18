@@ -8,6 +8,7 @@ import com.aliyun.oss.model.PolicyConditions;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.UnsupportedEncodingException;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -59,7 +60,7 @@ public class OssController {
         // respMap.put("expire", formatISO8601Date(expiration));
 
         JSONObject jasonCallback = new JSONObject();
-//			jasonCallback.put("callbackUrl", callbackUrl);
+        // jasonCallback.put("callbackUrl", callbackUrl);
         jasonCallback.put("callbackBody",
                 "filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}");
         jasonCallback.put("callbackBodyType", "application/x-www-form-urlencoded");

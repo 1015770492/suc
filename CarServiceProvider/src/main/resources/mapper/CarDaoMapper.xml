@@ -9,11 +9,11 @@
     mapper.xml以statement为单位管理sql语句
      -->
     <select id="getIndexCars" resultType="top.yumbo.springcloud.car.entity.Car">
-        select * from t_car limit 6
+        select * from t_car where car_status='待售' limit 6
     </select>
 
     <select id="getAllCars" resultType="top.yumbo.springcloud.car.entity.Car">
-        select * from t_car
+        select * from t_car where car_status='待售'
     </select>
 
     <select id="findCarById" resultType="top.yumbo.springcloud.car.entity.Car">
@@ -28,13 +28,12 @@
         insert into t_reserve(user_id,car_id,reserve_time,reserve_place,reserve_tel) values(#{userId},#{carId},#{reserveTime},#{reservePlace},#{reserveTel})
     </insert>
 
-
     <insert id="addCollection" parameterType="top.yumbo.springcloud.car.entity.Collect">
         insert into t_collect(user_id,car_id) values(#{userId},#{carId})
     </insert>
 
     <select id="checkCollection" resultType="top.yumbo.springcloud.car.entity.Collect">
-        select * from t_collect where user_id=#{user_id} and car_id=#{carId}
+        select * from t_collect where user_id=#{param1} and car_id=#{param2}
     </select>
 
     <select id="findUserCollections" resultType="top.yumbo.springcloud.car.entity.Car">
@@ -42,8 +41,15 @@
     </select>
 
     <delete id="delCollection" parameterType="top.yumbo.springcloud.car.entity.Collect">
-        delete from t_collect where user_id=#{userId} and car_id=#{carId}
+        delete from t_collect where user_id=#{param1} and car_id=#{param2}
     </delete>
 
+    <select id="findMyReservation" resultType="top.yumbo.springcloud.car.dto.Myreserve">
+        select c.*,r.reserve_id,r.reserve_time,r.reserve_place from t_car c,t_reserve r where r.user_id=#{userId} and r.car_id=c.car_id
+    </select>
+
+    <delete id="delReservation">
+        delete from t_reserve where reserve_id=#{reserveId}
+    </delete>
 </mapper>
 

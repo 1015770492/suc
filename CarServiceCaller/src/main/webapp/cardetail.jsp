@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="top.yumbo.springcloud.car.entity.Car" %><%--
   Created by IntelliJ IDEA.
   User: Administrator
@@ -29,6 +30,7 @@
     <script type="text/javascript" src="script/city.js"></script>
     <script type="text/javascript" src="script/snncar.js"></script>
     <script type="text/javascript" src="script/superslide.2.1.js"></script>
+
     <script type="text/javascript">
         $(function(){
             $('.navmenu li').hover(function(){
@@ -80,14 +82,21 @@
 <body>
 <div class="egc-top">
     <div class="nav-cent">
-        <div class="top-r"> <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a> </div>
+        <div class="top-r">
+            <c:if test="${sessionScope.loginuser==null}">
+                <a href="#" id="b-regist">注册</a>|<a href="#" id="b-login" class="b-login">登陆</a>
+            </c:if>
+            <c:if test="${sessionScope.loginuser!=null}">
+                欢迎你,${sessionScope.loginuser.userName}|<a href="yhcenter.jsp">个人中心</a>|<a href="userController/nologin" id="b-login" class="b-login">注销</a>
+            </c:if>
+        </div>
         <div class="top-l">全国统一客服热线：400-877-9288</div>
         <div class="clear_fix"></div>
     </div>
 </div>
 <div class="navigation">
     <div class="nav-cent">
-        <div class="logo"><a href="index.html"><img src="images/logo.png" width="240" /></a></div>
+        <div class="logo"><a href="index.jsp"><img src="images/logo.png" width="240" /></a></div>
         <div class="city"> <span id="DY_site_name" class="red city-name Left">合肥</span>
             <div id="JS_hide_city_menu_11" class="city-select cut_handdler Left"> <a href="javascript:void(0);" class="common-bg selector">切换城市</a>
                 <div id="JS_header_city_bar_box" class="hide_city_group">
@@ -124,7 +133,7 @@
     </div>
 </div>
 <ul class="navmenu">
-    <li class="active"><a href="index.html">首页</a><span></span></li>
+    <li class="active"><a href="index.jsp">首页</a><span></span></li>
     <li><a href="list.html">我要买车</a><span></span></li>
     <li><a href="wymc.html">我要卖车</a><span></span></li>
     <li><a href="#">阳光联盟</a><span></span></li>
@@ -142,7 +151,7 @@
                 <h3 class="car-allname"><%=car.getCarDescription()%></h3>
                 <div class="price-box">
                     <div class="price-infor">
-                        <p><span class="nowprice"><%=car.getCarPrice()%>万元</span></p>
+                        <p><span class="nowprice"><%=car.getCarPrice()/10000%>万元</span></p>
                     </div>
                     <div class="price_button" id="sendprice"><a>咨询卖家砍价</a></div>
                 </div>

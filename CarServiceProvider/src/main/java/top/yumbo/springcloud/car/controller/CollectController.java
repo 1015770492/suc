@@ -26,19 +26,19 @@ public class CollectController {
 
     @RequestMapping("/checkCollection")
     @ResponseBody
-    public Collect checkCollection(@RequestParam Integer user_id,@RequestParam Integer car_id){
+    public Collect checkCollection(@RequestParam long user_id,@RequestParam long car_id){
         return carBiz.checkCollection(user_id, car_id);
     }
 
     @RequestMapping("/findUserCollections")
     @ResponseBody
-    public List<Car> findUserCollections(@RequestParam Integer user_id){
+    public List<Car> findUserCollections(@RequestParam long user_id){
         return carBiz.findUserCollections(user_id);
     }
 
     @RequestMapping("/delCollection")
     @ResponseBody
-    public Boolean delCollection(@RequestParam Integer user_id,@RequestParam Integer car_id){
+    public Boolean delCollection(@RequestParam long user_id,@RequestParam long car_id){
         return carBiz.delCollection(user_id, car_id);
     }
 

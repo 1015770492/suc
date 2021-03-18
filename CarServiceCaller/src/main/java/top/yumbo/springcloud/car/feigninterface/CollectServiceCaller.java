@@ -16,11 +16,11 @@ public interface CollectServiceCaller {
     Boolean addCollection(@RequestBody Collect collect);
 
     @RequestMapping("/collectController/checkCollection")
-    Collect checkCollection(@RequestParam(value = "user_id") Integer user_id,@RequestParam(value = "car_id") Integer car_id);
+    Collect checkCollection(@RequestParam(value = "user_id") long user_id,@RequestParam(value = "car_id") long car_id);
 
     @RequestMapping("/collectController/findUserCollections")
-    List<Car> finUserCollections(@RequestParam(value = "user_id") Integer user_id);
+    List<Car> finUserCollections(@RequestParam(value = "user_id") long user_id);
 
     @RequestMapping("/collectController/delCollection")
-    Boolean delCollection(@RequestParam(value = "user_id") Integer user_id,@RequestParam(value = "car_id") Integer car_id);
+    Boolean delCollection(@RequestParam(value = "user_id") long user_id,@RequestParam(value = "car_id") long car_id);
 }

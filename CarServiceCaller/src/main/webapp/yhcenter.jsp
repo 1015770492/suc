@@ -22,6 +22,7 @@
     <script type="text/javascript" src="script/eg_top_search.js"></script>
     <script type="text/javascript" src="script/city.js"></script>
     <script type="text/javascript" src="script/snncar.js"></script>
+
     <script type="text/javascript">
         $(function(){
             $('.navmenu li').hover(function(){
@@ -87,7 +88,6 @@
             });
         });
     </script>
-
     <!--搜搜框获取焦点-->
     <script type="text/javascript">
         $(function () {
@@ -128,6 +128,7 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         $(function () {
             var scroll_heitht = $('body').offset().top;
@@ -147,16 +148,17 @@
     </script>
 </head>
 <body>
+<c:if test="${sessionScope.loginuser!=null}">
 <div class="egc-top">
     <div class="nav-cent">
-        <div class="top-r"> <a href="#" id="b-regist">朱先生</a>|<a href="#" id="b-login" class="b-login">退出</a> </div>
+        <div class="top-r"> <a href="#" id="b-regist">${sessionScope.loginuser.userName}</a>|<a href="/userController/nologin" id="b-login" class="b-login">退出</a> </div>
         <div class="top-l">全国统一客服热线：400-877-9288</div>
         <div class="clear_fix"></div>
     </div>
 </div>
 <div class="navigation">
     <div class="nav-cent">
-        <div class="logo"><a href="index.html"><img src="images/logo.png" width="240" /></a></div>
+        <div class="logo"><a href="index.jsp"><img src="images/logo.png" width="240" /></a></div>
         <div class="city"> <span id="DY_site_name" class="red city-name Left">合肥</span>
             <div id="JS_hide_city_menu_11" class="city-select cut_handdler Left"> <a href="javascript:void(0);" class="common-bg selector">切换城市</a>
                 <div id="JS_header_city_bar_box" class="hide_city_group">
@@ -193,9 +195,9 @@
     </div>
 </div>
 <ul class="navmenu">
-    <li class="active"><a href="index.html">首页</a><span></span></li>
-    <li><a href="list.html">我要买车</a><span></span></li>
-    <li><a href="wymc.html">我要卖车</a><span></span></li>
+    <li class="active"><a href="index.jsp">首页</a><span></span></li>
+    <li><a href="cars.jsp">我要买车</a><span></span></li>
+    <li><a href="#">我要卖车</a><span></span></li>
     <li><a href="#">阳光联盟</a><span></span></li>
     <li><a href="#">我要加盟</a><span></span></li>
 </ul>
@@ -205,9 +207,9 @@
     <div class="nav-cents">
         <ul>
             <li class="logo"><a href="index.html"><img src="images/logo.png"  width="180"/></a></li>
-            <li><a href="index.html">首页</a></li>
-            <li><a href="list.html">我要买车</a></li>
-            <li><a href="wymc.html">我要卖车</a></li>
+            <li><a href="index.jsp">首页</a></li>
+            <li><a href="cars.jsp">我要买车</a></li>
+            <li><a href="#">我要卖车</a></li>
             <li><a href="#">阳光联盟</a></li>
             <li><a href="#">我要加盟</a></li>
         </ul>
@@ -224,9 +226,10 @@
     <div class="meb-cont clearfix mainbox">
         <div class="meb-nav fl dInline">
             <ul class="clearfix">
-                <li class="on"><a href="会员中心首页.html">会员中心</a></li>
-                <li><a href="会员中心_我的需求.html">我的收藏</a></li>
-                <li><a href="会员中心_账户管理.html">账户管理</a></li>
+                <li class="on"><a href="yhcenter.jsp">会员中心</a></li>
+                <li><a href="mycollect.jsp">我的收藏</a></li>
+                <li><a href="myreserve.jsp">我的预约</a></li>
+                <li><a href="updateuser.jsp">账户管理</a></li>
             </ul>
         </div>
         <div class="meb-right fr dInline">
@@ -236,9 +239,10 @@
             <img src="images/photo.png">
         </span>
                     <div class="mr-infor fl dInline">
-                        <h2>中午好，尊敬的会员 <b>朱先生</b></h2>
+                        <h2>中午好，尊敬的会员 <b>${sessionScope.loginuser.userName}</b></h2>
+                        <input type="hidden" value="${sessionScope.loginuser.userId}" id="userId">
                         <p>
-                            手机：15138911875   邮箱：  |  [ <a href="#">管理账户信息</a> ]
+                            手机：${sessionScope.loginuser.userTel}    |  [ <a href="updateuser.jsp">管理账户信息</a> ]
                         </p>
                     </div>
                 </div>
@@ -249,7 +253,7 @@
                         <ul class="clearfix">
                             <li>
                                 <img src="images/hu2.png">
-                                <span>您共有 <a href="#"><b>1</b></a> 个收藏的车型</span>
+                                <span id="t1"></span>
                             </li>
                         </ul>
                     </div>
@@ -261,6 +265,15 @@
     </div>
 </div>
 <div class="clear_fix"></div>
+<script >
+    $(document).ready(function () {
+        var id=document.getElementById("userId").value;
+                    $.get("/userController/selectCollectCount",{userId:id},function (data) {
+                       var str="您共有"+"<a href='mycollect.jsp'><b>"+data.length+"</b></a> 个收藏的车型";
+                        $("#t1").html(str);
+    });
+    });
+</script>
 <!--底部-->
 <div class="ftWrap">
     <div class="foot">
@@ -300,68 +313,18 @@
         <div class="cent"> Copyright © 2016-2017, snncar.com,All Rights Reserved 皖ICP备16022456号-1</div>
     </div>
 </div>
+
 <script type="text/javascript" src="script/3c-menu.js"></script>
 <script type="text/javascript" src="script/lg_reg.js"></script>
-<!--会员登录和注册弹出框开始-->
-<div id="popBox">
-    <div class="popCont"> <a class="p_closed">关闭</a>
-        <div class="p-tab"> <a>会员登录<i></i></a><a>会员注册<i></i></a> </div>
-        <div class="p-detail">
-            <div class="p-dl">
-                <form onsubmit="return check();" enctype="multipart/form-data" method="post" name="form" id="form">
-                    <ul class="login-items">
-                        <li>
-                            <label>用户名(手机号)</label>
-                            <input class="input" type="text" value="" maxlength="32"  name="username" placeholder="请输入您的手机号">
-                        </li>
-                        <li>
-                            <label>密码</label>
-                            <input class="input" type="password" value="" maxlength="16"  name="password">
-                        </li>
-                    </ul>
-                    <div class="login-check">
-                        <input type="checkbox" name="checkbox" style=" width:auto;" />
-                        <label>记住我</label>
-                        <a href="Meet/editPass">忘记登录密码？</a> </div>
-                    <div class="login-button">
-                        <input type="hidden" value="" name="carid" class="ordercarid" />
-                        <input type="hidden" value="" name="carstatus" class="orderstatus" />
-                        <input type="button"  value="登&nbsp;&nbsp;&nbsp;&nbsp;陆" class="fM" onclick="$('#form').submit()" />
-                    </div>
-                </form>
-            </div>
-            <div class="p-dl">
-                <form class="registForm" onsubmit="return regcheck();" enctype="multipart/form-data" method="post" name="reg" id="reg">
-                    <ul class="login-items">
-                        <li class="clearfix">
-                            <input class="input" name="mobile" id="mobile" type="text" value="" placeholder="手机号码（登录帐号）">
-                        </li>
-                        <li class="clearfix">
-                            <input class="input left" type="text" value=""  name="verify" placeholder="输入验证码" style="width:100px;" />
-                            <div id="send"><a href="#" class="send_code right">获取验证码</a></div>
-                        </li>
-                        <li class="clearfix">
-                            <input class="input" type="text" value=""  name="realname" placeholder="姓名">
-                        </li>
-                        <li class="clearfix sex">
-                            <input type="radio" checked="" name="gender" value="M" />
-                            男&nbsp;&nbsp;&nbsp;&nbsp;
-                            <input type="radio" name="gender" value="F" />
-                            女 </li>
-                        <li class="clearfix">
-                            <input id="" class="input" type="password" name="password" value="" placeholder="输入密码（六位字符）">
-                        </li>
-                    </ul>
-                    <div class="login-button">
-                        <input type="hidden" value="" name="carid" class="ordercarid" />
-                        <input type="hidden" value="" name="carstatus" class="orderstatus" />
-                        <input type="button"  value="立即注册" class="fM" onclick="$('#reg').submit()" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!--会员登录和注册弹出框结束-->
+</c:if>
+
+<%--<c:if test="${sessionScope.loginuser==null}">--%>
+    <%--<script >--%>
+        <%--$(document).ready(function () {--%>
+            <%--location.href="../index.jsp";--%>
+        <%--});--%>
+
+    <%--</script>--%>
+<%--</c:if>--%>
 </body>
 </html>
